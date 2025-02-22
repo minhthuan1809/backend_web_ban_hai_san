@@ -1,0 +1,96 @@
+-- Tạo bảng Website_Brand
+CREATE TABLE Website_Brand (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    logo_url VARCHAR(255) NOT NULL,
+    brand_name VARCHAR(100) NOT NULL,
+    alt_text VARCHAR(100)
+);
+
+-- Tạo bảng Navigation_Menu
+CREATE TABLE Navigation_Menu (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    parent_id INT DEFAULT NULL,
+    order_position INT NOT NULL,
+    is_active BOOLEAN DEFAULT FALSE,
+    is_visible BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (parent_id) REFERENCES Navigation_Menu(id) ON DELETE SET NULL
+);
+
+INSERT INTO Website_Brand (logo_url, brand_name, alt_text) 
+VALUES ('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'Cá Xanh', 'Logo cá thương hiệu');
+
+INSERT INTO Navigation_Menu (name, url, parent_id, order_position, is_active, is_visible) 
+VALUES 
+    ('Trang chủ', '/trang-chu', NULL, 1, TRUE, TRUE),
+    ('Sản phẩm', '/san-pham', NULL, 2, FALSE, TRUE),
+    ('Giới thiệu', '/gioi-thieu', NULL, 3, FALSE, TRUE),
+    ('Liên hệ', '/lien-he', NULL, 4, FALSE, TRUE),
+    ('Tin tức', '/tin-tuc', NULL, 5, FALSE, TRUE),
+    ('Đăng nhập', '/dang-nhap', NULL, 6, FALSE, TRUE),
+    ('Đăng ký', '/dang-ky', NULL, 7, FALSE, TRUE);
+
+
+-- footer
+-- Bảng giới thiệu
+CREATE TABLE introductionsfooter (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+-- Bảng liên hệ
+CREATE TABLE contactsfooter (
+    id SERIAL PRIMARY KEY,
+    icon VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bảng social media với target text
+CREATE TABLE social_media_links (
+    id SERIAL PRIMARY KEY,
+    platform VARCHAR(50) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    target TEXT DEFAULT '_self',  -- Thay đổi is_blank thành target với giá trị mặc định '_self'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (platform)
+);
+
+-- copyright
+CREATE TABLE copyright (
+    id SERIAL PRIMARY KEY,
+    text VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+INSERT INTO introductionsfooter (title, description) 
+VALUES (
+    'Giới thiệu',
+    'Là một nhà hàng sang trọng với không gian ấm cúng và phong cách hiện đại. Chúng tôi phục vụ các món ăn đặc sắc được chế biến từ những nguyên liệu tươi ngon nhất cùng đồ uống chất lượng cao.'
+);
+
+
+INSERT INTO contactsfooter (icon, type) VALUES
+('Map', '123 Đường ABC, Quận XYZ'),
+('Phone', '(123) 456-7890'),
+('Email', 'info@example.com'),
+('Time', 'Thứ 2 - Thứ 5: 11:00 - 22:00; Thứ 6 - Chủ Nhật: 11:00 - 23:00');
+
+
+INSERT INTO social_media_links (platform, url, target) VALUES
+('Facebook', 'https://facebook.com/minhthuan', '_blank'),
+('Instagram', 'https://instagram.com/minhthuan', '_blank'),
+('YouTube', 'https://youtube.com/minhthuan', '_blank');
+
+INSERT INTO copyright (text) VALUES
+('2025 MINHTHUAN. Bản quyền được bảo lưu.');
