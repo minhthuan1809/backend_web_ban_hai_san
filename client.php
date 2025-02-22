@@ -10,17 +10,17 @@ $request_uri = $_SERVER['REQUEST_URI'];
 
 //[GET][POST][PUT][DELETE] http://localhost/backend_web_ban_hai_san/client.php/navbar 
 if (strpos($request_uri, '/navbar') !== false) {
-    include './layout/nav.php';
+    include __DIR__ . '/layout/nav.php';
 }
 
 //[PUT] http://localhost/backend_web_ban_hai_san/client.php/logo 
 else if (strpos($request_uri, '/logo') !== false) {
-    include './layout/putlogo.php';
+    include __DIR__ . '/layout/putlogo.php';
 }   
 
 // [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/client.php/footer 
 else if (strpos($request_uri, '/footer') !== false) {
-    include './layout/indexfooter.php';
+    include __DIR__ . '/layout/indexfooter.php';
 } 
 
 else {
