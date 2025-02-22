@@ -1,10 +1,11 @@
 -- Tạo bảng Website_Brand
 CREATE TABLE Website_Brand (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    logo_url VARCHAR(255) NOT NULL,
+    logo_url LONGTEXT NOT NULL,  -- Xóa (255) vì LONGTEXT không cần giới hạn độ dài
     brand_name VARCHAR(100) NOT NULL,
     alt_text VARCHAR(100)
 );
+
 
 -- Tạo bảng Navigation_Menu
 CREATE TABLE Navigation_Menu (

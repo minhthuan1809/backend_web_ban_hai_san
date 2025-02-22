@@ -1,5 +1,5 @@
 <?php
-require_once '../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
     echo json_encode([
@@ -20,7 +20,7 @@ if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
 }
 
 // Đọc API_KEY_TOKEN từ file .env
-$env_content = file_get_contents('../.env');
+$env_content = file_get_contents(__DIR__ . '/../../.env');
 $api_key_token = '';
 if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
     $api_key_token = trim($matches[1]);
@@ -90,7 +90,6 @@ try {
             "ok" => true,
             "success" => true,
             "message" => "Thêm menu mới thành công",
-            "id" => $conn->insert_id
         ]);
     } else {
         throw new Exception("Lỗi khi thêm menu mới: " . $stmt->error);

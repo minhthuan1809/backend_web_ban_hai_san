@@ -20,7 +20,7 @@ else if (strpos($request_uri, '/logo') !== false) {
 
 // [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/client.php/footer 
 else if (strpos($request_uri, '/footer') !== false) {
-    include './layout/footer/indexfooter.php';
+    include './layout/indexfooter.php';
 } 
 
 else {
