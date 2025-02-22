@@ -1,4 +1,10 @@
 <?php
+// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer/social 
+// {
+//     "platform": "string",
+//     "url": "string"
+// }
+
 header('Content-Type: application/json');
 
 // Use absolute path to require the database configuration file
@@ -55,7 +61,7 @@ $target = isset($data['target']) ? $data['target'] : '_self';
 
 // Insert new social media link
 try {
-    $insertSql = "INSERT INTO social_media_links (platform, url, target) VALUES (?, ?, ?)";
+    $insertSql = "INSERT INTO layout_social_media_links (platform, url, target) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($insertSql);
     
     if ($stmt === false) {
@@ -74,13 +80,12 @@ try {
             "ok" => true,
             "success" => true,
             "message" => "Thêm mới thành công",
-            "id" => $conn->insert_id
         ]);
     } else {
         echo json_encode([
             "ok" => false,
             "success" => false,
-            "message" => "Không thể thêm bản ghi"
+            "message" => "đã tồn tại"
         ]);
     }
 

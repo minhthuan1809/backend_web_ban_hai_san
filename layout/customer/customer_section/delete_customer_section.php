@@ -1,8 +1,8 @@
 <?php
-// [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer/contacts/1
+// [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/customer_section/customer__section/1
 header('Content-Type: application/json');
 
-// Check request method
+// Kiểm tra phương thức request
 if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
     echo json_encode([
         "ok" => false,
@@ -12,19 +12,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
     exit;
 }
 
-// Use absolute path to require the database configuration file
+// Kết nối database
 require_once __DIR__ . '/../../../config/db.php';
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
     echo json_encode([
         "ok" => false,
         "success" => false,
-        "message" => "Không thể kết nối đến cơ sở dữ liệu" 
+        "message" => "Không thể kết nối đến cơ sở dữ liệu"
     ]);
     exit;
 }
 
-// Get token from Authorization header
+// Lấy token từ header Authorization
 $headers = apache_request_headers();
 $auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
 $token = '';
@@ -33,56 +33,54 @@ if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
     $token = $matches[1];
 }
 
-// Read API_KEY_TOKEN from .env file
+// Đọc API_KEY_TOKEN từ file .env
 $env_content = file_get_contents(__DIR__ . '/../../../.env');
 $api_key_token = '';
 if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
     $api_key_token = trim($matches[1]);
 }
 
-// Check token
+// Kiểm tra token
 if ($token !== $api_key_token) {
     echo json_encode([
         "ok" => false,
         "success" => false,
-        "message" => "xác thực thất bại"
-    ]);
-    exit;
-}
-
-// Get id from URL
-$id = basename($_SERVER['REQUEST_URI']); // Get the last segment of the URL
-
-if (!is_numeric($id) || intval($id) <= 0) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "ID không hợp lệ"
+        "message" => "Xác thực thất bại"
     ]);
     exit;
 }
 
 try {
-    // Delete record by id
-    $deleteSql = "DELETE FROM layout_contactsfooter WHERE id = ?";
-    $stmt = $conn->prepare($deleteSql);
-    $stmt->bind_param("i", $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode([
-            "ok" => true,
-            "success" => true,
-            "message" => "Xóa thành công"
-        ]);
-    } else {
-        echo json_encode([
-            "ok" => false,
-            "success" => false,
-            "message" => "Không thể xóa bản ghi"
-        ]);
+    // Lấy ID từ URL
+    $url_parts = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+    $id = end($url_parts);
+
+    if (!is_numeric($id)) {
+        throw new Exception("ID không hợp lệ");
     }
 
-    $stmt->close();
+    // Chuẩn bị câu lệnh SQL
+    $sql = "DELETE FROM layout_customer_section WHERE id = ?";
+    
+    // Chuẩn bị và thực thi câu lệnh
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $result = $stmt->execute();
+
+    if (!$result) {
+        throw new Exception("Lỗi khi xóa: " . $stmt->error);
+    }
+
+    if ($stmt->affected_rows === 0) {
+        throw new Exception("Không tìm thấy bản ghi với ID = " . $id);
+    }
+
+    echo json_encode([
+        "ok" => true,
+        "success" => true,
+        "message" => "Xóa thành công"
+    ]);
+
 } catch (Exception $e) {
     echo json_encode([
         "ok" => false,
@@ -92,3 +90,5 @@ try {
 }
 
 $conn->close();
+?>
+

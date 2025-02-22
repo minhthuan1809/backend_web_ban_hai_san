@@ -1,4 +1,5 @@
 <?php
+// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/nav
 require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
@@ -46,7 +47,7 @@ try {
     }
 
     // Kiểm tra trùng lặp URL và tên
-    $check_sql = "SELECT * FROM Navigation_Menu WHERE url = ? OR name = ?";
+    $check_sql = "SELECT * FROM layout_navigation_menu WHERE url = ? OR name = ?";
     $check_stmt = $conn->prepare($check_sql);
     $check_stmt->bind_param("ss", $data['url'], $data['name']);
     $check_stmt->execute();
@@ -62,7 +63,7 @@ try {
     }
 
     // Chuẩn bị câu lệnh SQL
-    $sql = "INSERT INTO Navigation_Menu (name, url, parent_id, order_position, is_active, is_visible) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO layout_navigation_menu (name, url, parent_id, order_position, is_active, is_visible) VALUES (?, ?, ?, ?, ?, ?)";
     
     // Gán giá trị mặc định nếu không được cung cấp
     $parent_id = isset($data['parent_id']) ? $data['parent_id'] : null;

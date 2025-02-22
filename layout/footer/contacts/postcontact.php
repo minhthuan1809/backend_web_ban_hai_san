@@ -1,4 +1,10 @@
 <?php
+// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer/contacts 
+    // {
+    //     "icon": "string",
+    //     "type": "string"
+    // }
+
 header('Content-Type: application/json');
 
 // Check request method
@@ -62,7 +68,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 
 // Insert new record
 try {
-    $insertSql = "INSERT INTO contactsfooter (icon, type, created_at) VALUES (?, ?, NOW())";
+    $insertSql = "INSERT INTO layout_contactsfooter (icon, type, created_at) VALUES (?, ?, NOW())";
     $stmt = $conn->prepare($insertSql);
     $stmt->bind_param("ss", $data['icon'], $data['type']);
     

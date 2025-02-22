@@ -1,4 +1,9 @@
 <?php
+// [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer/copyright 
+// {
+//     "text": "string"
+// }
+
 header('Content-Type: application/json');
 
 // Use absolute path to require the database configuration file
@@ -16,7 +21,7 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 // Get token from Authorization header
 $headers = apache_request_headers();
 $auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
+$token = '';    
 
 if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
     $token = $matches[1];
@@ -52,7 +57,7 @@ if (json_last_error() !== JSON_ERROR_NONE || !isset($data['text'])) {
 
 // Update the copyright record
 try {
-    $updateSql = "UPDATE copyright SET text = ?, updated_at = NOW()"; // Changed 'content' to 'text'
+    $updateSql = "UPDATE layout_copyright SET text = ?, updated_at = NOW()"; // Changed 'content' to 'text'
     $stmt = $conn->prepare($updateSql);
     
     if ($stmt === false) {

@@ -47,7 +47,7 @@ try {
     }
 
     // Chuẩn bị và thực thi câu lệnh SQL
-    $stmt = $conn->prepare("DELETE FROM Navigation_Menu WHERE id = ?");
+    $stmt = $conn->prepare("DELETE FROM layout_navigation_menu WHERE id = ?");
     $stmt->bind_param("i", $id);
     
     if ($stmt->execute()) {

@@ -16,8 +16,8 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 
 try {
     // Query to select data from the Navigation_Menu table
-    $sql = "SELECT * FROM Navigation_Menu";
-    $logoImg = "SELECT * FROM Website_Brand";
+    $sql = "SELECT * FROM layout_navigation_menu";
+    $logoImg = "SELECT * FROM layout_website_brand";
     $result = $conn->query($sql);
     $resultLogo = $conn->query($logoImg);
     $response = [];

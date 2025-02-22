@@ -1,4 +1,9 @@
 <?php
+// [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer/introduction 
+//     {
+//         "title": "string",
+//         "description": "string"
+//     }
 header('Content-Type: application/json');
 
 // Use absolute path to require the database configuration file
@@ -52,7 +57,7 @@ if (json_last_error() !== JSON_ERROR_NONE || !isset($data['title'], $data['descr
 
 // Update the single record
 try {
-    $updateSql = "UPDATE introductionsfooter SET title = ?, description = ?, updated_at = NOW()";
+    $updateSql = "UPDATE layout_introductionsfooter SET title = ?, description = ?, updated_at = NOW()";
     $stmt = $conn->prepare($updateSql);
     $stmt->bind_param("ss", $data['title'], $data['description']);
     

@@ -1,4 +1,5 @@
 <?php
+// [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer/social/1
 header('Content-Type: application/json');
 
 // Use absolute path to require the database configuration file
@@ -56,7 +57,7 @@ if (!is_numeric($id)) {
 
 // Prepare the DELETE statement
 try {
-    $deleteSql = "DELETE FROM social_media_links WHERE id = ?";
+    $deleteSql = "DELETE FROM layout_social_media_links WHERE id = ?";
     $stmt = $conn->prepare($deleteSql);
     
     if ($stmt === false) {

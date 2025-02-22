@@ -1,4 +1,10 @@
 <?php
+// [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer/contacts/1 
+// {
+//     "icon": "string",
+//     "type": "string"
+// }
+
 header('Content-Type: application/json');
 
 // Check request method
@@ -74,7 +80,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 
 // Update record by id
 try {
-    $updateSql = "UPDATE contactsfooter SET icon = ?, type = ?, updated_at = NOW() WHERE id = ?";
+    $updateSql = "UPDATE layout_contactsfooter SET icon = ?, type = ?, updated_at = NOW() WHERE id = ?";
     $stmt = $conn->prepare($updateSql);
     $stmt->bind_param("ssi", $data['icon'], $data['type'], $id);
     

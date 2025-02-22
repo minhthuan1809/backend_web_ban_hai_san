@@ -1,4 +1,5 @@
 <?php
+// [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/nav
 require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
@@ -50,7 +51,7 @@ try {
     $data = json_decode(file_get_contents("php://input"), true);
 
     // Chuẩn bị câu lệnh SQL
-    $sql = "UPDATE Navigation_Menu SET ";
+    $sql = "UPDATE layout_navigation_menu SET ";
     $params = [];
     $types = "";
     
@@ -65,9 +66,9 @@ try {
         $params[] = $data['url'];
         $types .= "s";
     }
-    if (isset($data['order'])) {
-        $sql .= "`order` = ?, ";
-        $params[] = $data['order'];
+    if (isset($data['order_position'])) {
+        $sql .= "order_position = ?, ";
+        $params[] = $data['order_position'];
         $types .= "i";
     }
     

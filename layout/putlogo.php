@@ -1,4 +1,5 @@
 <?php
+// [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/logo
 header('Content-Type: application/json');
 
 // Kiểm tra phương thức request
@@ -50,6 +51,31 @@ if ($token !== $api_key_token) {
 }
 
 try {
+    // Tạo bảng website_brand nếu chưa tồn tại
+    $create_table_sql = "CREATE TABLE IF NOT EXISTS website_brand (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        brand_name VARCHAR(255),
+        logo_url TEXT,
+        alt_text VARCHAR(255)
+    )";
+    
+    if (!$conn->query($create_table_sql)) {
+        throw new Exception("Lỗi tạo bảng: " . $conn->error);
+    }
+
+    // Kiểm tra xem đã có dữ liệu trong bảng chưa
+    $check_sql = "SELECT COUNT(*) as count FROM website_brand";
+    $result = $conn->query($check_sql);
+    $row = $result->fetch_assoc();
+    
+    if ($row['count'] == 0) {
+        // Nếu bảng trống, thêm dữ liệu mặc định
+        $insert_sql = "INSERT INTO website_brand (brand_name, logo_url, alt_text) VALUES ('', '', '')";
+        if (!$conn->query($insert_sql)) {
+            throw new Exception("Lỗi thêm dữ liệu mặc định: " . $conn->error);
+        }
+    }
+
     // Lấy dữ liệu từ request
     $data = json_decode(file_get_contents("php://input"), true);
 
@@ -59,7 +85,7 @@ try {
     }
 
     // Chuẩn bị câu lệnh SQL
-    $sql = "UPDATE Website_Brand SET ";
+    $sql = "UPDATE website_brand SET ";
     $params = [];
     $types = "";
     

@@ -1,4 +1,10 @@
 <?php
+// [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer/social/1 
+//     {
+//         "platform": "string",
+//         "url": "string"
+//     }
+
 header('Content-Type: application/json');
 
 // Use absolute path to require the database configuration file
@@ -59,7 +65,7 @@ $target = isset($data['target']) ? $data['target'] : '_self';
 
 // Update existing social media link
 try {
-    $updateSql = "UPDATE social_media_links SET platform = ?, url = ?, target = ? WHERE id = ?";
+    $updateSql = "UPDATE layout_social_media_links SET platform = ?, url = ?, target = ? WHERE id = ?";
     $stmt = $conn->prepare($updateSql);
     
     if ($stmt === false) {

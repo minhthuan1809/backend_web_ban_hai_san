@@ -1,4 +1,5 @@
 <?php
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/footer
 header('Content-Type: application/json');
 
 // Kiểm tra phương thức request
