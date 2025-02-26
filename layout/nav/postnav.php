@@ -41,9 +41,38 @@ try {
     // Lấy dữ liệu từ request
     $data = json_decode(file_get_contents("php://input"), true);
 
+    // Kiểm tra dữ liệu có trống không
+    if (empty($data)) {
+        echo json_encode([
+            "ok" => false,
+            "success" => false,
+            "message" => "Dữ liệu gửi lên không được để trống"
+        ]);
+        exit;
+    }
+
     // Kiểm tra dữ liệu bắt buộc
     if (!isset($data['name']) || !isset($data['url'])) {
         throw new Exception("Thiếu thông tin bắt buộc");
+    }
+
+    // Kiểm tra từng trường dữ liệu có trống không
+    if (empty($data['name'])) {
+        echo json_encode([
+            "ok" => false,
+            "success" => false,
+            "message" => "Tên menu không được để trống"
+        ]);
+        exit;
+    }
+
+    if (empty($data['url'])) {
+        echo json_encode([
+            "ok" => false,
+            "success" => false,
+            "message" => "URL không được để trống"
+        ]);
+        exit;
     }
 
     // Kiểm tra trùng lặp URL và tên

@@ -1,5 +1,17 @@
 <?php
 // [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/nav
+header('Content-Type: application/json');
+
+// Kiểm tra phương thức request
+if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+    echo json_encode([
+        "ok" => false,
+        "success" => false,
+        "message" => "Phương thức " . $_SERVER['REQUEST_METHOD'] . " không được hỗ trợ"
+    ]);
+    exit;
+}
+
 require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
@@ -32,16 +44,15 @@ if ($token !== $api_key_token) {
     echo json_encode([
         "ok" => false,
         "success" => false,
-        "message" => "auth failed"
+        "message" => "Xác thực thất bại"
     ]);
     exit;
 }
 
 try {
     // Lấy ID từ URL path
-    $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    $path_parts = explode('/', $url_path);
-    $id = end($path_parts);
+    $url_parts = explode('/', rtrim($_SERVER['REQUEST_URI'], '/'));
+    $id = end($url_parts);
 
     if (!$id || !is_numeric($id)) {
         throw new Exception("ID không hợp lệ");
@@ -49,6 +60,10 @@ try {
 
     // Lấy dữ liệu từ request
     $data = json_decode(file_get_contents("php://input"), true);
+
+    if (empty($data)) {
+        throw new Exception("Không có dữ liệu được gửi");
+    }
 
     // Chuẩn bị câu lệnh SQL
     $sql = "UPDATE layout_navigation_menu SET ";
@@ -71,6 +86,11 @@ try {
         $params[] = $data['order_position'];
         $types .= "i";
     }
+
+    // Kiểm tra xem có trường nào được cập nhật không
+    if (empty($params)) {
+        throw new Exception("Không có trường nào được cập nhật");
+    }
     
     // Xóa dấu phẩy và khoảng trắng cuối cùng
     $sql = rtrim($sql, ", ");
@@ -81,36 +101,42 @@ try {
 
     // Thực thi câu lệnh
     $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        throw new Exception("Lỗi chuẩn bị câu lệnh: " . $conn->error);
+    }
+
     $stmt->bind_param($types, ...$params);
     
-    if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0) {
-            echo json_encode([
-                "ok" => true,
-                "success" => true,
-                "message" => "Cập nhật menu thành công"
-            ]);
-        } else {
-            echo json_encode([
-                "ok" => false,
-                "success" => false,
-                "message" => "Không có thay đổi nào được thực hiện"
-            ]);
-        }
+    if (!$stmt->execute()) {
+        throw new Exception("Lỗi thực thi câu lệnh: " . $stmt->error);
+    }
+
+    if ($stmt->affected_rows > 0) {
+        echo json_encode([
+            "ok" => true,
+            "success" => true,
+            "message" => "Cập nhật menu thành công"
+        ]);
     } else {
-        throw new Exception("Lỗi khi cập nhật menu");
+        echo json_encode([
+            "ok" => false,
+            "success" => false,
+            "message" => "Bạn không có thay đổi gì"
+        ]);
     }
 
 } catch (Exception $e) {
     echo json_encode([
         "ok" => false,
         "success" => false,
-        "message" => "Lỗi: " . $e->getMessage()
+        "message" => $e->getMessage()
     ]);
 } finally {
     if (isset($stmt)) {
         $stmt->close();
     }
-    $conn->close();
+    if (isset($conn)) {
+        $conn->close();
+    }
 }
 ?>

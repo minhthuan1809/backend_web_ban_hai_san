@@ -1,66 +1,67 @@
 <?php
-header('Content-Type: application/json'); // Set the content type to JSON
+header('Content-Type: application/json');
 
-// Include the database connection file
-require_once __DIR__ . '/../../config/db.php'; // Sửa đường dẫn để trỏ đến file db.php chính xác
+require_once __DIR__ . '/../../config/db.php';
 
-// Kiểm tra kết nối
 if (!isset($conn) || !($conn instanceof mysqli)) {
     $error_response = [
-        "error" => true,
-        "message" => "Không thể kết nối đến cơ sở dữ liệu"
+        "ok" => false,
+        "success" => false,
+        "data" => [
+            "navigation" => [],
+            "brand" => []
+        ]
     ];
     echo json_encode($error_response);
     exit;
 }
 
 try {
-    // Query to select data from the Navigation_Menu table
-    $sql = "SELECT * FROM layout_navigation_menu";
+    $sql = "SELECT * FROM layout_navigation_menu ORDER BY order_position ASC";
     $logoImg = "SELECT * FROM layout_website_brand";
     $result = $conn->query($sql);
     $resultLogo = $conn->query($logoImg);
     $response = [];
     $logo = [];
 
-    if ($result->num_rows > 0 && $resultLogo->num_rows > 0) {
-        // Fetch all results into an array
+    // Kiểm tra và lấy dữ liệu navigation nếu có
+    if ($result && $result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
             $response[] = $row;
         }
+    }
+
+    // Kiểm tra và lấy dữ liệu brand nếu có  
+    if ($resultLogo && $resultLogo->num_rows > 0) {
         while($rowLogo = $resultLogo->fetch_assoc()) {
             $logo = $rowLogo;
         }
-        
-        $final_response = [
-            "ok" => true,
-            "success" => true,
-            "data" => [
-                "navigation" => $response,
-                "brand" => $logo
-            ]
-        ];
-    } else {
-        $final_response = [
-            "ok" => false,
-            "success" => false,
-            "message" => "Không tìm thấy dữ liệu"
-        ];
     }
 
-    // Return the response as JSON
+    $final_response = [
+        "ok" => true,
+        "success" => true,
+        "data" => [
+            "navigation" => $response,
+            "brand" => $logo
+        ]
+    ];
+
     echo json_encode($final_response);
 
 } catch (Exception $e) {
-    // Xử lý lỗi và trả về thông báo
     $error_response = [
         "ok" => false,
         "success" => false,
         "error" => true,
-        "message" => "Đã xảy ra lỗi: " . $e->getMessage()
+        "message" => "Đã xảy ra lỗi: " . $e->getMessage(),
+        "data" => [
+            "navigation" => [],
+            "brand" => []
+        ]
     ];
     echo json_encode($error_response);
 } finally {
-    $conn->close(); // Chỉ đóng kết nối một lần ở cuối script
+    $conn->close();
 }
 ?>

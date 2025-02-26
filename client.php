@@ -38,6 +38,16 @@ else if (preg_match('/\/customer_section/', $request_uri)) {
     include __DIR__ . '/layout/index_customer_section.php';
 }
 
+// [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/client.php/customer_choose_section 
+else if (preg_match('/\/customer_choose_section/', $request_uri)) {
+    include __DIR__ . '/layout/index_customer_choose_section.php';
+}
+
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/contacts
+else if (preg_match('/\/contacts/', $request_uri)) {
+    include __DIR__ . '/layout/footer/contacts/getContact.php';
+}
+
 else {
     echo json_encode([
         'ok' => false,

@@ -20,7 +20,7 @@ CREATE TABLE layout_Navigation_Menu (
 );
 
 INSERT INTO layout_Website_Brand (logo_url, brand_name, alt_text) 
-VALUES ('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'Cá Xanh', 'Logo cá thương hiệu');
+VALUES ('/images/logo.png', 'Cá Xanh', 'Logo cá thương hiệu');
 
 INSERT INTO layout_Navigation_Menu (name, url, parent_id, order_position, is_active, is_visible) 
 VALUES 
@@ -57,7 +57,7 @@ CREATE TABLE layout_social_media_links (
     id SERIAL PRIMARY KEY,
     platform VARCHAR(50) NOT NULL,
     url VARCHAR(255) NOT NULL,
-    target TEXT DEFAULT '_self',  -- Thay đổi is_blank thành target với giá trị mặc định '_self'
+    target TEXT DEFAULT '_self',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (platform)
@@ -104,20 +104,21 @@ CREATE TABLE layout_slide_header (
 );
 
 INSERT INTO layout_slide_header (image_url, title, description) VALUES
-('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'MINH THUẬN', 'Chào mừng bạn đến với nhà hàng của chúng tôi !'),
-('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'MINH THUẬN', 'Chào mừng bạn đến với nhà hàng của chúng tôi !'),
-('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'MINH THUẬN', 'Chào mừng bạn đến với nhà hàng của chúng tôi !');
+('/images/slide1.jpg', 'MINH THUẬN', 'Chào mừng bạn đến với nhà hàng của chúng tôi !'),
+('/images/slide2.jpg', 'MINH THUẬN', 'Chào mừng bạn đến với nhà hàng của chúng tôi !'),
+('/images/slide3.jpg', 'MINH THUẬN', 'Chào mừng bạn đến với nhà hàng của chúng tôi !');
 
 -- introductionssection
 CREATE TABLE layout_introductionssection (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
-    content TEXT NOT NULL
+    content TEXT NOT NULL,
+    image_url LONGTEXT NOT NULL
 );
 
-INSERT INTO layout_introductionssection (title, description, content) VALUES
-('Minh Thuận', 'Nhà hàng hải sản Minh Thuận là điểm đến lý tưởng cho những tín đồ yêu thích hải sản tươi sống. Tọa lạc ngay sát bờ biển Bình Thuận, Minh Thuận tự hào mang đến nguồn hải sản tươi ngon nhất, được đánh bắt trực tiếp mỗi ngày. Với hơn 50 loại hải sản phong phú, chế biến theo công thức đặc biệt, chúng tôi mang đến những món ăn thơm ngon, đậm đà hương vị biển cả, khiến thực khách nhớ mãi không quên.', 'Tận hưởng hải sản chất lượng mà không phải lo về giá cả. Chúng tôi cam kết mang đến những sản phẩm tươi sạch, an toàn với mức giá hợp lý, cùng dịch vụ tận tâm.');
+INSERT INTO layout_introductionssection (title, description, content, image_url) VALUES
+('Minh Thuận', 'Nhà hàng hải sản Minh Thuận là điểm đến lý tưởng cho những tín đồ yêu thích hải sản tươi sống. Tọa lạc ngay sát bờ biển Bình Thuận, Minh Thuận tự hào mang đến nguồn hải sản tươi ngon nhất, được đánh bắt trực tiếp mỗi ngày. Với hơn 50 loại hải sản phong phú, chế biến theo công thức đặc biệt, chúng tôi mang đến những món ăn thơm ngon, đậm đà hương vị biển cả, khiến thực khách nhớ mãi không quên.', 'Tận hưởng hải sản chất lượng mà không phải lo về giá cả. Chúng tôi cam kết mang đến những sản phẩm tươi sạch, an toàn với mức giá hợp lý, cùng dịch vụ tận tâm.', '/images/intro.jpg');
 
 -- customer_section
 CREATE TABLE layout_customer_section (
@@ -134,9 +135,35 @@ CREATE TABLE layout_customer_section_img (
 );
 
 INSERT INTO layout_customer_section_img (image_url, title) VALUES
-('https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'Khách hàng nói gì về chúng tôi');
+('/images/customer-banner.jpg', 'Khách hàng nói gì về chúng tôi');
 
 INSERT INTO layout_customer_section (name, image_url, description) VALUES
-('Nguyễn Minh Thuận', 'https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
-('Nguyễn Minh Thuận', 'https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
-('Nguyễn Minh Thuận', 'https://scontent.fhan17-1.fna.fbcdn.net/v/t1.15752-9/476910520_1976798496147567_3316850609173496871_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeG9rl0p6_I41QRDhQy64BpGrYwEG4xAFIqtjAQbjEAUinH6vLA-mx-HjT2g3TD0qU7o0ooePG_hLOXHrvRCOvsr&_nc_ohc=_-OmregOGi0Q7kNvgFPk-GQ&_nc_oc=AdhWp0qc0gsv5Z6E-9RhkrLB5pvb2MAtItBordLBlayMR4FcFeJRftfaWN3dhO-o1Ow&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&oh=03_Q7cD1gE-XNJYwRJIajjLkPNv79GcIoZFgi1pVNQ2OraIzszs_g&oe=67DA22C1', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.');
+('Nguyễn Minh Thuận', '/images/customer1.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
+('Nguyễn Minh Thuận', '/images/customer2.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
+('Nguyễn Minh Thuận', '/images/customer3.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.');
+
+
+-- customer_choose_section
+CREATE TABLE layout_customer_choose_section (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    image_url LONGTEXT NOT NULL
+);
+
+CREATE TABLE layout_customer_choose_item_section (
+    id SERIAL PRIMARY KEY,
+    icon VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL
+);
+
+INSERT INTO layout_customer_choose_section (title, image_url) VALUES
+('Đây là lý do khách hàng thường chọn chúng tôi', '/images/customer-choose-item.jpg');
+
+INSERT INTO layout_customer_choose_item_section (icon, title, description) VALUES
+('Cookie', 'Thực phẩm sạch, tươi ngon nhất', 'được lựa chọn kỹ càng'),
+('Utensils', 'Duy trì hương vị và chất lượng', 'thực phẩm ngon nhất'), 
+('Check', 'Món ăn được chế biến phong phú', 'và đa dạng'),
+('ThumbsUp', 'Giá cả ổn định, phong cách phục vụ', 'chuyên nghiệp');
+
+
