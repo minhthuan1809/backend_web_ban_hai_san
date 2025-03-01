@@ -167,3 +167,44 @@ INSERT INTO layout_customer_choose_item_section (icon, title, description) VALUE
 ('ThumbsUp', 'Giá cả ổn định, phong cách phục vụ', 'chuyên nghiệp');
 
 
+
+-- news
+CREATE TABLE News (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description LONGTEXT NOT NULL,
+    image_url LONGTEXT NOT NULL,
+    status BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO News (title, description, image_url, status) VALUES
+('Tin tức mới nhất', '<div class="article-content">
+      <p class="text-base leading-relaxed mb-4">Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</p>
+      
+      <h2 class="text-2xl font-bold mt-6 mb-4">Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</h2>
+      <ul class="list-disc pl-6 mb-6">
+        <li class="mb-2">Tôm sú đã làm sạch</li>
+        <li class="mb-2">Me tươi</li>
+        <li class="mb-2">Hành lá, rau ăn</li>
+        <li class="mb-2">Những thành phần khác như nước mắm, dầu ăn, đường...</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mt-6 mb-4">Cách sơ chế nguyên liệu chế biến:</h2>
+      <ul class="list-disc pl-6 mb-6">
+        <li class="mb-2">Tôm rửa sạch, đánh vảy và cắt râu</li>
+        <li class="mb-2">Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</li>
+        <li class="mb-2">Đồ gia vị</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold mt-6 mb-4">Cách làm tôm rang me như sau:</h2>
+      <p class="text-base leading-relaxed">Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</p>
+    </div>', 'https://picsum.photos/200/300', TRUE);  
+
+
+
+
+
+
+

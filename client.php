@@ -48,6 +48,11 @@ else if (preg_match('/\/contacts/', $request_uri)) {
     include __DIR__ . '/layout/footer/contacts/getContact.php';
 }
 
+// [GET] [POST] [PUT] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/news
+else if (preg_match('/\/news/', $request_uri)) {
+    include __DIR__ . '/news/indexnews.php';
+}
+
 else {
     echo json_encode([
         'ok' => false,
