@@ -52,6 +52,15 @@ else if (preg_match('/\/contacts/', $request_uri)) {
 else if (preg_match('/\/news/', $request_uri)) {
     include __DIR__ . '/news/indexnews.php';
 }
+// [GET] [POST] [PUT] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/send_contacts
+else if (preg_match('/\/send_contacts/', $request_uri)) {
+    include __DIR__ . '/contact/IndexContact.php';
+}
+
+// [GET] [POST] [PUT] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/about
+else if (preg_match('/\/about/', $request_uri)) {
+    include __DIR__ . '/layout/about/indexAbout.php';
+}
 
 else {
     echo json_encode([

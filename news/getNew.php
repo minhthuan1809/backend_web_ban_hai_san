@@ -25,13 +25,14 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 }
 
 try {
-    // Lấy tham số page và limit từ URL
+    // Lấy tham số page, limit và search từ URL
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 6;
+    $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
     $offset = ($page - 1) * $limit;
 
-    // Lấy tổng số bản ghi
-    $total_sql = "SELECT COUNT(*) as total FROM News";
+    // Lấy tổng số bản ghi với điều kiện tìm kiếm
+    $total_sql = "SELECT COUNT(*) as total FROM News WHERE title LIKE '%$search%'";
     $total_result = $conn->query($total_sql);
     if ($total_result === false) {
         throw new Exception("Lỗi truy vấn: " . $conn->error);
@@ -40,8 +41,8 @@ try {
     $total_records = $total_row['total'];
     $total_pages = ceil($total_records / $limit);
 
-    // Lấy bản ghi từ bảng News với phân trang
-    $sql = "SELECT * FROM News ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
+    // Lấy bản ghi từ bảng News với phân trang và điều kiện tìm kiếm
+    $sql = "SELECT * FROM News WHERE title LIKE '%$search%' ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
     $result = $conn->query($sql);
 
     if ($result === false) {
@@ -50,9 +51,16 @@ try {
 
     $news = [];
     while ($row = $result->fetch_assoc()) {
-        // Trích xuất đoạn text đầu tiên từ bất kỳ thẻ nào trong description
-        preg_match('/<[^>]+>(.*?)<\/[^>]+>/', $row['description'], $matches);
-        $description_text = isset($matches[1]) ? $matches[1] : '';
+        // Trích xuất nội dung bên trong thẻ HTML đầu tiên trong description
+        preg_match_all('/<([^>]+)>(.*?)<\/\1>/', $row['description'], $matches);
+        if (count($matches[0]) > 3) {
+            $description_text = '';
+            foreach ($matches[2] as $content) {
+                $description_text .= strip_tags($content) . ' ';
+            }
+        } else {
+            $description_text = strip_tags($row['description']);
+        }
 
         $news[] = [
             "id" => $row['id'],

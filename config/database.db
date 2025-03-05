@@ -205,6 +205,138 @@ INSERT INTO News (title, description, image_url, status) VALUES
 
 
 
+ 
+
+-- contacts 
+
+CREATE TABLE Contacts (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    content LONGTEXT NOT NULL,
+    gmail VARCHAR(255) NOT NULL,
+    title VARCHAR(255) DEFAULT '',
+    is_read BOOLEAN DEFAULT FALSE,
+    is_sent BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+-- introduction
+CREATE TABLE layout_story (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description_one LONGTEXT NOT NULL,
+    description_two LONGTEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO layout_story (title , description_one , description_two) VALUES
+('Câu Chuyện Của Chúng Tôi', 'Nhà hàng Hải Sản Minh Thuận được thành lập từ năm 2003, khởi đầu là một quán ăn nhỏ với tâm huyết mang đến những món hải sản tươi ngon nhất cho thực khách. Qua hơn 20 năm phát triển, chúng tôi đã trở thành một trong những nhà hàng hải sản uy tín nhất trong khu vực.', 'Với sự phát triển của công nghệ, chúng tôi đã mở rộng dịch vụ sang mảng đặt hàng trực tuyến và giao hàng tận nơi, giúp thực khách có thể thưởng thức các món ăn ngon của nhà hàng ngay tại nhà.');
+
+-- ordering_process
+CREATE TABLE layout_ordering_process (
+    id SERIAL PRIMARY KEY,
+    icon VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO layout_ordering_process (icon, title, description) VALUES
+('ShoppingBag', 'Chọn món', 'Dễ dàng đặt hàng qua website hoặc gọi điện trực tiếp'),
+('CreditCard', 'Thanh Toán', 'Đa dạng phương thức thanh toán: tiền mặt, chuyển khoản, ví điện tử'),
+('Truck', 'Giao Hàng', 'Giao hàng nhanh chóng, đảm bảo chất lượng món ăn');
+
+
+-- Dịch Vụ Đặt Hàng Online
+CREATE TABLE layout_ordering_online (
+    id SERIAL PRIMARY KEY,
+    icon VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description_one TEXT NOT NULL,
+    description_two TEXT NOT NULL,
+    description_three TEXT NOT NULL,
+    description_four TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO layout_ordering_online (icon, title, description_one, description_two, description_three, description_four) VALUES
+('Truck', 'Giao Hàng Tận Nơi', ' Phạm vi giao hàng: 10km từ nhà hàng', 'Thời gian giao hàng: 30-45 phút', 'Đóng gói cẩn thận, giữ nhiệt tốt', 'Miễn phí giao hàng cho đơn từ 500.000đ');    
+
+INSERT INTO layout_ordering_online (icon, title, description_one, description_two, description_three, description_four) VALUES
+('Clock', 'Thời Gian Phục Vụ', 'Nhà hàng: 10:00 - 22:00', 'Đặt hàng online: 10:00 - 21:00', 'Phục vụ tất cả các ngày trong tuần', 'Hotline đặt hàng: 0123 456 789');    
+
+
+-- không gian
+CREATE TABLE layout_space (
+    id SERIAL PRIMARY KEY,
+    icon VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description_one TEXT NOT NULL,
+    description_two TEXT NOT NULL,
+    description_three TEXT NOT NULL,
+    description_four TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO layout_space (icon, title, description_one, description_two, description_three, description_four) VALUES
+('ChefHat', 'Khu Vực Bếp Chuyên Nghiệp', 'Nhân viên bếp được đào tạo bài bản', 'Trang thiết bị hiện đại, đảm bảo vệ sinh an toàn thực phẩm', 'Khu vực sơ chế và chế biến thực phẩm', 'Hệ thống làm mát và thông gió đạt chuẩn'),
+('Cook', 'Đội Ngũ Bếp', 'Đội ngũ bếp trưởng với hơn 15 năm kinh nghiệm', 'Rất nhiều món ăn đặc sắc được chế biến', 'Quy trình chế biến chuẩn mực', 'Kiểm soát chất lượng nghiêm ngặt');
+
+
+-- không gian lợi ích
+    
+CREATE TABLE layout_benefit (
+    id SERIAL PRIMARY KEY,
+    icon VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO layout_benefit (icon, title, description) VALUES
+('CheckCircle', 'Chất Lượng', 'Cam kết sử dụng hải sản tươi sống 100%'),
+('Plate', 'Đa Dạng', 'Thực đơn phong phú với hơn 100 món ăn'),
+('ServiceBell', 'Phục Vụ', 'Đội ngũ nhân viên chuyên nghiệp, thân thiện'),
+('ThumbsUp', 'Uy Tín', '20 năm kinh nghiệm phục vụ');
+
+
+-- Cam Kết Của Chúng Tôi
+CREATE TABLE layout_commitment (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description_one TEXT NOT NULL,
+    description_two TEXT NOT NULL,
+    description_three TEXT NOT NULL,
+    description_four TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO layout_commitment (title, description_one, description_two, description_three, description_four) VALUES
+('Cam Kết Chất Lượng', 'Đảm bảo chất lượng món ăn từ nhà hàng', 'Giao hàng đúng giờ, đúng địa chỉ', 'Đổi trả miễn phí nếu món ăn không đúng yêu cầu', 'Nhân viên giao hàng chuyên nghiệp, thân thiện');
 
 
 
+-- product
+CREATE TABLE layout_product (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL ,
+    description TEXT NOT NULL,
+    image LONGTEXT NOT NULL DEFAULT 'https://picsum.photos/200',
+    price DECIMAL(10, 2) NOT NULL,
+    hot BOOLEAN NOT NULL DEFAULT true,
+    rating DECIMAL(2, 1) NOT NULL ,
+    category VARCHAR(255) NOT NULL DEFAULT 'crab', -- loại sản phẩm
+    quantity INT NOT NULL DEFAULT 0, -- số lượng
+    inStock BOOLEAN NOT NULL DEFAULT false, -- còn hàng hay không
+    status BOOLEAN NOT NULL DEFAULT false, -- trạng thái sản phẩm
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
