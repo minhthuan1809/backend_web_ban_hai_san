@@ -68,6 +68,16 @@ else if (preg_match('/\/products/', $request_uri)) {
     
 }
 
+// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/register
+else if (preg_match('/\/register/', $request_uri)) {
+    include __DIR__ . '/api/register.php';
+}
+
+// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/login
+else if (preg_match('/\/login/', $request_uri)) {
+    include __DIR__ . '/api/login.php';
+}
+
 else {
     echo json_encode([
         'ok' => false,
