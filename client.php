@@ -62,6 +62,12 @@ else if (preg_match('/\/about/', $request_uri)) {
     include __DIR__ . '/layout/about/indexAbout.php';
 }
 
+// [GET] [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/products
+else if (preg_match('/\/products/', $request_uri)) {
+    include __DIR__ . '/products/indexProducts.php';
+    
+}
+
 else {
     echo json_encode([
         'ok' => false,
