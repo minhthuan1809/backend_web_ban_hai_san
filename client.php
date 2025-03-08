@@ -78,6 +78,13 @@ else if (preg_match('/\/login/', $request_uri)) {
     include __DIR__ . '/api/login.php';
 }
 
+
+//kiểm tra phân quyền
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/check_permission
+else if (preg_match('/\/check_permission/', $request_uri)) {
+    include __DIR__ . '/check_permission.php';
+}
+
 else {
     echo json_encode([
         'ok' => false,
