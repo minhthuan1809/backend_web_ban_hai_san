@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../controller/permission/PermissionController.php';
+require_once __DIR__ . '../../controller/permission/PermissionController.php';
 
 class PermissionMiddleware {
     private $permissionController;
