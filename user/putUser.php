@@ -1,5 +1,5 @@
 <?php
-// [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/news/10
+// [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/user/10
 require_once __DIR__ . '/../config/db.php'; // Sửa đường dẫn để đảm bảo đúng vị trí file
 
 if (!isset($conn) || !($conn instanceof mysqli)) {
@@ -10,7 +10,6 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
     ]);
     exit;
 }
-
 
 try {
     // Lấy ID từ URL
@@ -39,80 +38,88 @@ try {
         exit;
     }
 
-    // Thông báo khi dữ liệu không có
-    if (!isset($data['title']) || !isset($data['description']) || !isset($data['image_url']) || !isset($data['status'])) {
+    // Xây dựng câu lệnh SQL động dựa trên dữ liệu được gửi lên
+    $updateFields = [];
+    $types = '';
+    $params = [];
+
+    if (isset($data['fullName']) && !empty($data['fullName'])) {
+        $updateFields[] = "fullName = ?";
+        $types .= 's';
+        $params[] = $data['fullName'];
+    }
+
+    if (isset($data['email']) && !empty($data['email'])) {
+        $updateFields[] = "email = ?";
+        $types .= 's';
+        $params[] = $data['email'];
+    }
+
+    if (isset($data['password']) && !empty($data['password'])) {
+        $updateFields[] = "password = ?";
+        $types .= 's';
+        $params[] = password_hash($data['password'], PASSWORD_DEFAULT);
+    }
+
+    if (isset($data['avatar']) && !empty($data['avatar'])) {
+        $updateFields[] = "avatar = ?";
+        $types .= 's';
+        $params[] = $data['avatar'];
+    }
+
+    if (isset($data['roleId'])) {
+        $updateFields[] = "role_id = ?";
+        $types .= 'i';
+        $params[] = $data['roleId'];
+    }
+
+    if (isset($data['status'])) {
+        $updateFields[] = "status = ?";
+        $types .= 'i';
+        $params[] = $data['status'];
+    }
+
+    if (empty($updateFields)) {
         echo json_encode([
             "ok" => false,
             "success" => false,
-            "message" => "Thông báo không có dữ liệu bạn không được để trống"
+            "message" => "Không có dữ liệu nào được cập nhật"
         ]);
         exit;
     }
 
-    // Kiểm tra từng trường dữ liệu có trống không
-    if (empty($data['title'])) {
-        echo json_encode([
-            "ok" => false,
-            "success" => false,
-            "message" => "Tiêu đề không được để trống"
-        ]);
-        exit;
-    }
+    // Thêm tham số ID vào cuối
+    $types .= 'i';
+    $params[] = $id;
 
-    if (empty($data['description'])) {
-        echo json_encode([
-            "ok" => false,
-            "success" => false,
-            "message" => "Mô tả không được để trống"
-        ]);
-        exit;
-    }
-
-    if (empty($data['image_url'])) {
-        echo json_encode([
-            "ok" => false,
-            "success" => false,
-            "message" => "URL hình ảnh không được để trống"
-        ]);
-        exit;
-    }
-
-    // Chuẩn bị câu lệnh SQL
-    $sql = "UPDATE News SET title = ?, description = ?, image_url = ?, status = ? WHERE id = ?";
-    
-    // Gán giá trị mặc định nếu không được cung cấp
-    $status = isset($data['status']) ? (bool)$data['status'] : true;
+    // Tạo câu lệnh SQL
+    $sql = "UPDATE user SET " . implode(", ", $updateFields) . " WHERE id = ?";
     
     // Chuẩn bị và thực thi câu lệnh
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         throw new Exception("Lỗi chuẩn bị câu lệnh: " . $conn->error);
     }
-    
-    $stmt->bind_param("ssssi", 
-        $data['title'], 
-        $data['description'],
-        $data['image_url'],
-        $status,
-        $id
-    );
+
+    // Bind các tham số động
+    $stmt->bind_param($types, ...$params);
     
     if ($stmt->execute()) {
         if ($stmt->affected_rows === 0) {
             echo json_encode([
                 "ok" => false,
                 "success" => false,
-                "message" => "Đã có lỗi xảy ra, trường không tồn tại"
+                "message" => "Đã có lỗi xảy ra, người dùng không tồn tại hoặc không có thay đổi"
             ]);
         } else {
             echo json_encode([
                 "ok" => true,
                 "success" => true,
-                "message" => "Cập nhật tin tức thành công",
+                "message" => "Cập nhật người dùng thành công"
             ]);
         }
     } else {
-        throw new Exception("Lỗi khi cập nhật tin tức: " . $stmt->error);
+        throw new Exception("Lỗi khi cập nhật người dùng: " . $stmt->error);
     }
 
 } catch (Exception $e) {

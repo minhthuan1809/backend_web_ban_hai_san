@@ -11,31 +11,6 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
     exit;
 }
 
-// Lấy token từ header Authorization
-$headers = apache_request_headers();
-$auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
-
-if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
-    $token = $matches[1];
-}
-
-// Đọc API_KEY_TOKEN từ file .env
-$env_content = file_get_contents(__DIR__ . '/../.env'); // Sửa đường dẫn để đảm bảo đúng vị trí file
-$api_key_token = '';
-if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
-    $api_key_token = trim($matches[1]);
-}
-
-// Kiểm tra token
-if ($token !== $api_key_token) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "auth failed"
-    ]);
-    exit;
-}
 
 try {
     // Lấy dữ liệu từ request
@@ -60,6 +35,7 @@ try {
         ]);
         exit;
     }
+   
 
     // Kiểm tra từng trường dữ liệu có trống không
     if (empty($data['name'])) {

@@ -1,6 +1,42 @@
 <?php
 class JwtUtils {
-    private static $secretKey = "your_secret_key_here"; // Thay thế bằng secret key thực của bạn
+    private static $secretKey = '/KEY_JWT=(.*)/'; // Thay thế bằng secret key thực của bạn
+    
+    // Thêm phương thức dọn dẹp blacklist
+    private static function cleanupBlacklist() {
+        global $conn;
+        try {
+            // Xóa các token đã hết hạn (older than 1 hour - thời gian hết hạn của token)
+            $sql = "DELETE FROM blacklisted_tokens WHERE created_at < (NOW() - INTERVAL 1 HOUR)";
+            if ($conn->query($sql) === false) {
+                throw new Exception("Lỗi xóa token hết hạn: " . $conn->error);
+            }
+        } catch (Exception $e) {
+            error_log("Lỗi cleanup blacklist: " . $e->getMessage());
+        }
+    }
+    
+    private static function isTokenBlacklisted($token) {
+        global $conn;
+        // Dọn dẹp blacklist trước khi kiểm tra
+        self::cleanupBlacklist();
+        
+        $sql = "SELECT id FROM blacklisted_tokens WHERE token = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            error_log("Lỗi prepare statement: " . $conn->error);
+            return false;
+        }
+        
+        $stmt->bind_param("s", $token);
+        if (!$stmt->execute()) {
+            error_log("Lỗi execute statement: " . $stmt->error);
+            return false;
+        }
+        
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+    }
     
     public static function generateToken($userId, $email) {
         $header = json_encode([
@@ -25,6 +61,11 @@ class JwtUtils {
     }
     
     public static function validateToken($token) {
+        // Kiểm tra token có trong blacklist không
+        if (self::isTokenBlacklisted($token)) {
+            return false;
+        }
+        
         $parts = explode('.', $token);
         if (count($parts) != 3) {
             return false;
@@ -49,4 +90,4 @@ class JwtUtils {
         return $payload;
     }
 }
-?> 
+?>

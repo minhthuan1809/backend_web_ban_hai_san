@@ -36,15 +36,19 @@ class TokenUtils {
      * 
      * @param string|null $token JWT token hoặc null để tự động lấy từ header
      * @return int ID của người dùng
+     * @throws Exception nếu token không hợp lệ hoặc đã hết hạn
      */
     public static function validateTokenAndGetUserId($token = null) {
         $userId = self::getUserIdFromToken($token);
         
         if ($userId === null) {
-            throw new Exception("Token không hợp lệ hoặc đã hết hạn");
+            header('Content-Type: application/json');
+            http_response_code(401);
+            echo json_encode([ 'ok' => false, 'success' => false, 'message' => 'Token không hợp lệ hoặc đã hết hạn']);
+            exit();
         }
         
         return $userId;
     }
 }
-?> 
+?>

@@ -1,5 +1,5 @@
-<?php
-// [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/hero_section
+        <?php
+// [GET] [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/role
 require_once __DIR__ . '/../core/middleware/PermissionMiddleware.php';
 require_once __DIR__ . '/../config/TokenUtils.php';
 
@@ -9,26 +9,32 @@ header('Content-Type: application/json');
 $permissionMiddleware = new PermissionMiddleware();
 
 try {
-    // Kiểm tra phương thức request
+    // Kiểm tra quyền truy cập dựa trên phương thức request
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            include __DIR__ . '/hero_section/get_hero_section.php';
-            break;
-        case 'POST':
             $userId = TokenUtils::validateTokenAndGetUserId();
-            $permissionMiddleware->authorize($userId, 'post_header');
-            include __DIR__ . '/hero_section/post_hero_section.php';
+            $permissionMiddleware->authorize($userId, 'get_role');
+            include __DIR__ . '/getRole.php';
             break;
+
         case 'PUT':
             $userId = TokenUtils::validateTokenAndGetUserId();
-            $permissionMiddleware->authorize($userId, 'put_header');
-            include __DIR__ . '/hero_section/put_hero_section.php';
+            $permissionMiddleware->authorize($userId, 'put_role');
+            include __DIR__ . '/editRole.php';
             break;
+   
+        case 'POST':
+            $userId = TokenUtils::validateTokenAndGetUserId();
+            $permissionMiddleware->authorize($userId, 'post_role');
+            include __DIR__ . '/postRole.php';
+            break;
+
         case 'DELETE':
             $userId = TokenUtils::validateTokenAndGetUserId();
-            $permissionMiddleware->authorize($userId, 'delete_header');
-            include __DIR__ . '/hero_section/delete_hero_section.php';
+            $permissionMiddleware->authorize($userId, 'delete_role');
+            include __DIR__ . '/deleteRole.php';
             break;
+
         default:
             echo json_encode([
                 "ok" => false,
@@ -37,11 +43,12 @@ try {
             ]);
     }
 } catch (Exception $e) {
-    http_response_code(401);
+    // Xử lý lỗi bao gồm cả lỗi phân quyền
+    http_response_code(403);
     echo json_encode([
         "ok" => false,
         "success" => false,
-        "message" => "Đã có lỗi xảy ra: " . $e->getMessage()
+        "message" => $e->getMessage()
     ]);
 }
 ?>

@@ -34,9 +34,7 @@ class PermissionMiddleware {
                 "ok" => false,
                 "success" => false,
                 "message" => "Bạn không có quyền thực hiện hành động này",
-                "error_code" => "PERMISSION_DENIED",
-                "required_permission" => $permission,
-                "user_id" => $userId
+          
             ]);
             exit;
         }

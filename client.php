@@ -68,22 +68,34 @@ else if (preg_match('/\/products/', $request_uri)) {
     
 }
 
-// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/register
-else if (preg_match('/\/register/', $request_uri)) {
+// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/auth/register
+else if (preg_match('/\/auth\/register/', $request_uri)) {
     include __DIR__ . '/api/register.php';
 }
 
-// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/login
-else if (preg_match('/\/login/', $request_uri)) {
+// [POST] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/auth/login
+else if (preg_match('/\/auth\/login/', $request_uri)) {
     include __DIR__ . '/api/login.php';
 }
 
 
-//kiểm tra phân quyền
-// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/check_permission
-else if (preg_match('/\/check_permission/', $request_uri)) {
-    include __DIR__ . '/check_permission.php';
+
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/auth/user
+else if (preg_match('/\/auth\/user/', $request_uri)) {
+    include __DIR__ . '/api/CheckJwt.php';
 }
+
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/users
+else if (preg_match('/\/users/', $request_uri)) {
+    include __DIR__ . '/user/indexUser.php';
+}
+
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/role
+else if (preg_match('/\/role/', $request_uri)) {
+    include __DIR__ . '/role/indexRole.php';
+}
+
+
 
 else {
     echo json_encode([

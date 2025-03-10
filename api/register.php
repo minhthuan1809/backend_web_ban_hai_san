@@ -8,9 +8,9 @@ $db = $database;
 
 $data = json_decode(file_get_contents("php://input"));
 
-if (!empty($data->email) && !empty($data->password) && !empty($data->fullName)) {
+if (!empty($data->email) && !empty($data->password) && !empty($data->fullname)) {
     $auth = new AuthController();
-    $result = $auth->register($data->email, $data->password, $data->fullName);
+    $result = $auth->register($data->email, $data->password, $data->fullname);
     
     if ($result['status'] === 'success') {
         http_response_code(201);

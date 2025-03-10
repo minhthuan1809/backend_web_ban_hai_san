@@ -19,31 +19,6 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
     exit;
 }
 
-// Get token from Authorization header
-$headers = apache_request_headers();
-$auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
-
-if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
-    $token = $matches[1];
-}
-
-// Read API_KEY_TOKEN from .env file
-$env_content = file_get_contents(__DIR__ . '/../../../.env');
-$api_key_token = '';
-if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
-    $api_key_token = trim($matches[1]);
-}
-
-// Check token
-if ($token !== $api_key_token) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "xác thực thất bại"
-    ]);
-    exit;
-}
 
 // Get the ID from the request URI
 $request_uri = $_SERVER['REQUEST_URI'];

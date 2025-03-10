@@ -1,5 +1,5 @@
-        <?php
-// [GET] [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/news
+<?php
+// [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/users
 require_once __DIR__ . '/../core/middleware/PermissionMiddleware.php';
 require_once __DIR__ . '/../config/TokenUtils.php';
 
@@ -13,30 +13,32 @@ try {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             $request_uri = $_SERVER['REQUEST_URI'];
-            if (preg_match('/\/news\/\d+$/', $request_uri)) {
-                include __DIR__ . '/detailNew.php';
-            } else {
-                // Lấy tất cả bản ghi từ bảng News
-                include __DIR__ . '/getNew.php';
+            if (preg_match('/\/select_role$/', $request_uri)) {
+                include __DIR__ . '/getSelectRole.php';
+            }else{
+                $userId = TokenUtils::validateTokenAndGetUserId();
+                $permissionMiddleware->authorize($userId, 'get_user');
+                $request_uri = $_SERVER['REQUEST_URI'];
+                include __DIR__ . '/getUser.php';
             }
             break;
 
         case 'PUT':
             $userId = TokenUtils::validateTokenAndGetUserId();
-            $permissionMiddleware->authorize($userId, 'put_new');
-            include __DIR__ . '/putNew.php';
+            $permissionMiddleware->authorize($userId, 'put_user');
+            include __DIR__ . '/putUser.php';
             break;
    
         case 'POST':
             $userId = TokenUtils::validateTokenAndGetUserId();
-            $permissionMiddleware->authorize($userId, 'post_new');
-            include __DIR__ . '/postNews.php';
+            $permissionMiddleware->authorize($userId, 'post_user');
+            include __DIR__ . '/postUser.php';
             break;
 
         case 'DELETE':
             $userId = TokenUtils::validateTokenAndGetUserId();
-            $permissionMiddleware->authorize($userId, 'delete_new');
-            include __DIR__ . '/deleteNew.php';
+            $permissionMiddleware->authorize($userId, 'delete_user');
+            include __DIR__ . '/deleteUser.php';
             break;
 
         default:

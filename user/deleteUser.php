@@ -1,7 +1,6 @@
 <?php
-// [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/news
 header('Content-Type: application/json');
-
+// [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/users/{id}
 
 // Sửa đường dẫn để phù hợp với cấu trúc thư mục
 require_once __DIR__ . '/../config/db.php';
@@ -18,15 +17,26 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 try {
     // Lấy ID từ URL
     $request_uri = $_SERVER['REQUEST_URI'];
-    preg_match('/\/news\/(\d+)$/', $request_uri, $matches);
+    preg_match('/\/users\/(\d+)$/', $request_uri, $matches);
     $id = isset($matches[1]) ? (int)$matches[1] : 0;
 
     if ($id <= 0) {
         throw new Exception("ID không hợp lệ");
     }
 
-    // Xóa bản ghi từ bảng News theo ID
-    $sql = "DELETE FROM News WHERE id = ?";
+    // Kiểm tra xem người dùng có tồn tại không
+    $check_sql = "SELECT id FROM user WHERE id = ?";
+    $check_stmt = $conn->prepare($check_sql);
+    $check_stmt->bind_param("i", $id);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
+
+    if ($check_result->num_rows === 0) {
+        throw new Exception("Không tìm thấy người dùng với ID đã cho");
+    }
+
+    // Xóa bản ghi từ bảng user theo ID
+    $sql = "DELETE FROM user WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
     
@@ -37,7 +47,7 @@ try {
     echo json_encode([
         "ok" => true,
         "success" => true,
-        "message" => "Bài viết đã được xóa thành công"
+        "message" => "Người dùng đã được xóa thành công"
     ]);
 
 } catch (Exception $e) {
@@ -47,10 +57,14 @@ try {
         "message" => $e->getMessage()
     ]);
 } finally {
+    if (isset($check_stmt)) {
+        $check_stmt->close();
+    }
     if (isset($stmt)) {
-        $stmt->close();
+        $stmt->close(); 
     }
     if (isset($conn)) {
         $conn->close();
     }
 }
+?>

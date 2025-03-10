@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Mar 08, 2025 at 05:11 PM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th3 10, 2025 lúc 01:59 AM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,29 +18,48 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `haisan`
+-- Cơ sở dữ liệu: `haisan`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contacts`
+-- Cấu trúc bảng cho bảng `blacklisted_tokens`
 --
 
-CREATE TABLE `contacts` (
-  `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `content` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `gmail` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci DEFAULT '',
-  `is_read` tinyint(1) DEFAULT '0',
-  `is_sent` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+CREATE TABLE `blacklisted_tokens` (
+  `id` int(11) NOT NULL,
+  `token` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `contacts`
+-- Đang đổ dữ liệu cho bảng `blacklisted_tokens`
+--
+
+INSERT INTO `blacklisted_tokens` (`id`, `token`, `created_at`) VALUES
+(7, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3NDE1NjQzNjIsImV4cCI6MTc0MTU2Nzk2Mn0.IZQVB1ECR6l2x-tOxNgDFYE10_JZCFKY8HdwJvMT2JQ', '2025-03-10 00:28:39');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `contacts`
+--
+
+CREATE TABLE `contacts` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `content` longtext NOT NULL,
+  `gmail` varchar(255) NOT NULL,
+  `title` varchar(255) DEFAULT '',
+  `is_read` tinyint(1) DEFAULT 0,
+  `is_sent` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `contacts`
 --
 
 INSERT INTO `contacts` (`id`, `name`, `content`, `gmail`, `title`, `is_read`, `is_sent`, `created_at`, `updated_at`) VALUES
@@ -49,24 +68,24 @@ INSERT INTO `contacts` (`id`, `name`, `content`, `gmail`, `title`, `is_read`, `i
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_benefit`
+-- Cấu trúc bảng cho bảng `layout_benefit`
 --
 
 CREATE TABLE `layout_benefit` (
-  `id` bigint UNSIGNED NOT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_benefit`
+-- Đang đổ dữ liệu cho bảng `layout_benefit`
 --
 
 INSERT INTO `layout_benefit` (`id`, `icon`, `title`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'ShoppingBag', 'Chất Lượng', 'Cam kết sử dụng hải sản tươi sống 100%', '2025-03-03 23:48:42', '2025-03-05 13:58:27'),
+(1, 'ShoppingBag', 'Chất Lượng ', 'Cam kết sử dụng hải sản tươi sống 100%', '2025-03-03 23:48:42', '2025-03-09 23:20:10'),
 (2, 'Target', 'Đa Dạng', 'Thực đơn phong phú với hơn 100 món ăn', '2025-03-03 23:48:42', '2025-03-05 14:30:04'),
 (4, 'ThumbsUp', 'Uy Tín', '20 năm kinh nghiệm phục vụ', '2025-03-03 23:48:42', '2025-03-03 23:48:42'),
 (10, 'Server', 'Phục Vụ', 'Đội ngũ nhân viên chuyên nghiệp, thân thiện', '2025-03-05 14:09:55', '2025-03-05 14:09:55');
@@ -74,22 +93,22 @@ INSERT INTO `layout_benefit` (`id`, `icon`, `title`, `description`, `created_at`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_commitment`
+-- Cấu trúc bảng cho bảng `layout_commitment`
 --
 
 CREATE TABLE `layout_commitment` (
-  `id` bigint UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description_one` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_two` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_three` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_four` text COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description_one` text NOT NULL,
+  `description_two` text NOT NULL,
+  `description_three` text NOT NULL,
+  `description_four` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_commitment`
+-- Đang đổ dữ liệu cho bảng `layout_commitment`
 --
 
 INSERT INTO `layout_commitment` (`id`, `title`, `description_one`, `description_two`, `description_three`, `description_four`, `created_at`, `updated_at`) VALUES
@@ -98,23 +117,23 @@ INSERT INTO `layout_commitment` (`id`, `title`, `description_one`, `description_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_contactsfooter`
+-- Cấu trúc bảng cho bảng `layout_contactsfooter`
 --
 
 CREATE TABLE `layout_contactsfooter` (
-  `id` bigint UNSIGNED NOT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_contactsfooter`
+-- Đang đổ dữ liệu cho bảng `layout_contactsfooter`
 --
 
 INSERT INTO `layout_contactsfooter` (`id`, `icon`, `type`, `created_at`, `updated_at`) VALUES
-(1, 'Map', '123 Đường ABC, Quận XYZ', '2025-02-23 05:01:47', '2025-02-25 23:56:47'),
+(1, 'Map', '123 Đường ABC, Quận XYZ ', '2025-02-23 05:01:47', '2025-03-09 23:02:52'),
 (2, 'Phone', '(123) 456-7890', '2025-02-23 05:01:47', '2025-02-23 05:01:47'),
 (3, 'Mail', 'info@example.com', '2025-02-23 05:01:47', '2025-02-23 05:01:47'),
 (4, 'CalendarCheck2', 'Thứ 2 - Thứ 5: 11:00 - 22:00; Thứ 6 - Chủ Nhật: 11:00 - 23:00', '2025-02-23 05:01:47', '2025-02-23 05:01:47');
@@ -122,18 +141,18 @@ INSERT INTO `layout_contactsfooter` (`id`, `icon`, `type`, `created_at`, `update
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_copyright`
+-- Cấu trúc bảng cho bảng `layout_copyright`
 --
 
 CREATE TABLE `layout_copyright` (
-  `id` bigint UNSIGNED NOT NULL,
-  `text` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `text` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_copyright`
+-- Đang đổ dữ liệu cho bảng `layout_copyright`
 --
 
 INSERT INTO `layout_copyright` (`id`, `text`, `created_at`, `updated_at`) VALUES
@@ -142,18 +161,18 @@ INSERT INTO `layout_copyright` (`id`, `text`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_customer_choose_item_section`
+-- Cấu trúc bảng cho bảng `layout_customer_choose_item_section`
 --
 
 CREATE TABLE `layout_customer_choose_item_section` (
-  `id` bigint UNSIGNED NOT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci NOT NULL
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_customer_choose_item_section`
+-- Đang đổ dữ liệu cho bảng `layout_customer_choose_item_section`
 --
 
 INSERT INTO `layout_customer_choose_item_section` (`id`, `icon`, `title`, `description`) VALUES
@@ -165,17 +184,17 @@ INSERT INTO `layout_customer_choose_item_section` (`id`, `icon`, `title`, `descr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_customer_choose_section`
+-- Cấu trúc bảng cho bảng `layout_customer_choose_section`
 --
 
 CREATE TABLE `layout_customer_choose_section` (
-  `id` bigint UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `image_url` longtext COLLATE utf8mb4_general_ci NOT NULL
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `image_url` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_customer_choose_section`
+-- Đang đổ dữ liệu cho bảng `layout_customer_choose_section`
 --
 
 INSERT INTO `layout_customer_choose_section` (`id`, `title`, `image_url`) VALUES
@@ -184,18 +203,18 @@ INSERT INTO `layout_customer_choose_section` (`id`, `title`, `image_url`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_customer_section`
+-- Cấu trúc bảng cho bảng `layout_customer_section`
 --
 
 CREATE TABLE `layout_customer_section` (
-  `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `image_url` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci NOT NULL
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `image_url` longtext NOT NULL,
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_customer_section`
+-- Đang đổ dữ liệu cho bảng `layout_customer_section`
 --
 
 INSERT INTO `layout_customer_section` (`id`, `name`, `image_url`, `description`) VALUES
@@ -211,17 +230,17 @@ INSERT INTO `layout_customer_section` (`id`, `name`, `image_url`, `description`)
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_customer_section_img`
+-- Cấu trúc bảng cho bảng `layout_customer_section_img`
 --
 
 CREATE TABLE `layout_customer_section_img` (
-  `id` bigint UNSIGNED NOT NULL,
-  `image_url` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `image_url` longtext NOT NULL,
+  `title` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_customer_section_img`
+-- Đang đổ dữ liệu cho bảng `layout_customer_section_img`
 --
 
 INSERT INTO `layout_customer_section_img` (`id`, `image_url`, `title`) VALUES
@@ -230,19 +249,19 @@ INSERT INTO `layout_customer_section_img` (`id`, `image_url`, `title`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_introductionsfooter`
+-- Cấu trúc bảng cho bảng `layout_introductionsfooter`
 --
 
 CREATE TABLE `layout_introductionsfooter` (
-  `id` bigint UNSIGNED NOT NULL,
-  `title` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `description` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_introductionsfooter`
+-- Đang đổ dữ liệu cho bảng `layout_introductionsfooter`
 --
 
 INSERT INTO `layout_introductionsfooter` (`id`, `title`, `description`, `created_at`, `updated_at`) VALUES
@@ -251,42 +270,42 @@ INSERT INTO `layout_introductionsfooter` (`id`, `title`, `description`, `created
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_introductionssection`
+-- Cấu trúc bảng cho bảng `layout_introductionssection`
 --
 
 CREATE TABLE `layout_introductionssection` (
-  `id` bigint UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci NOT NULL,
-  `content` text COLLATE utf8mb4_general_ci NOT NULL,
-  `image_url` longtext COLLATE utf8mb4_general_ci NOT NULL
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `content` text NOT NULL,
+  `image_url` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_introductionssection`
+-- Đang đổ dữ liệu cho bảng `layout_introductionssection`
 --
 
 INSERT INTO `layout_introductionssection` (`id`, `title`, `description`, `content`, `image_url`) VALUES
-(1, 'Minh Thuận', 'Nhà hàng hải sản Minh Thuận là điểm đến lý tưởng cho những tín đồ yêu thích hải sản tươi sống. Tọa lạc ngay sát bờ biển Bình Thuận, Minh Thuận tự hào mang đến nguồn hải sản tươi ngon nhất, được đánh bắt trực tiếp mỗi ngày. Với hơn 50 loại hải sản phong phú, chế biến theo công thức đặc biệt, chúng tôi mang đến những món ăn thơm ngon, đậm đà hương vị biển cả, khiến thực khách nhớ mãi không quên.', 'Tận hưởng hải sản chất lượng mà không phải lo về giá cả. Chúng tôi cam kết mang đến những sản phẩm tươi sạch, an toàn với mức giá hợp lý, cùng dịch vụ tận tâm.', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740419894/tcnprvj4ldlnmtd8hhfc.jpg');
+(1, 'Minh Thuận ', 'Nhà hàng hải sản Minh Thuận là điểm đến lý tưởng cho những tín đồ yêu thích hải sản tươi sống. Tọa lạc ngay sát bờ biển Bình Thuận, Minh Thuận tự hào mang đến nguồn hải sản tươi ngon nhất, được đánh bắt trực tiếp mỗi ngày. Với hơn 50 loại hải sản phong phú, chế biến theo công thức đặc biệt, chúng tôi mang đến những món ăn thơm ngon, đậm đà hương vị biển cả, khiến thực khách nhớ mãi không quên.', 'Tận hưởng hải sản chất lượng mà không phải lo về giá cả. Chúng tôi cam kết mang đến những sản phẩm tươi sạch, an toàn với mức giá hợp lý, cùng dịch vụ tận tâm.', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740419894/tcnprvj4ldlnmtd8hhfc.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_navigation_menu`
+-- Cấu trúc bảng cho bảng `layout_navigation_menu`
 --
 
 CREATE TABLE `layout_navigation_menu` (
-  `id` int NOT NULL,
-  `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `parent_id` int DEFAULT NULL,
-  `order_position` int NOT NULL,
-  `is_active` tinyint(1) DEFAULT '0',
-  `is_visible` tinyint(1) DEFAULT '1'
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `order_position` int(11) NOT NULL,
+  `is_active` tinyint(1) DEFAULT 0,
+  `is_visible` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_navigation_menu`
+-- Đang đổ dữ liệu cho bảng `layout_navigation_menu`
 --
 
 INSERT INTO `layout_navigation_menu` (`id`, `name`, `url`, `parent_id`, `order_position`, `is_active`, `is_visible`) VALUES
@@ -299,23 +318,23 @@ INSERT INTO `layout_navigation_menu` (`id`, `name`, `url`, `parent_id`, `order_p
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_ordering_online`
+-- Cấu trúc bảng cho bảng `layout_ordering_online`
 --
 
 CREATE TABLE `layout_ordering_online` (
-  `id` bigint UNSIGNED NOT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description_one` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_two` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_three` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_four` text COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description_one` text NOT NULL,
+  `description_two` text NOT NULL,
+  `description_three` text NOT NULL,
+  `description_four` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_ordering_online`
+-- Đang đổ dữ liệu cho bảng `layout_ordering_online`
 --
 
 INSERT INTO `layout_ordering_online` (`id`, `icon`, `title`, `description_one`, `description_two`, `description_three`, `description_four`, `created_at`, `updated_at`) VALUES
@@ -325,20 +344,20 @@ INSERT INTO `layout_ordering_online` (`id`, `icon`, `title`, `description_one`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_ordering_process`
+-- Cấu trúc bảng cho bảng `layout_ordering_process`
 --
 
 CREATE TABLE `layout_ordering_process` (
-  `id` bigint UNSIGNED NOT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_ordering_process`
+-- Đang đổ dữ liệu cho bảng `layout_ordering_process`
 --
 
 INSERT INTO `layout_ordering_process` (`id`, `icon`, `title`, `description`, `created_at`, `updated_at`) VALUES
@@ -349,18 +368,18 @@ INSERT INTO `layout_ordering_process` (`id`, `icon`, `title`, `description`, `cr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_slide_header`
+-- Cấu trúc bảng cho bảng `layout_slide_header`
 --
 
 CREATE TABLE `layout_slide_header` (
-  `id` bigint UNSIGNED NOT NULL,
-  `image_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci NOT NULL
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `image_url` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_slide_header`
+-- Đang đổ dữ liệu cho bảng `layout_slide_header`
 --
 
 INSERT INTO `layout_slide_header` (`id`, `image_url`, `title`, `description`) VALUES
@@ -371,20 +390,20 @@ INSERT INTO `layout_slide_header` (`id`, `image_url`, `title`, `description`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_social_media_links`
+-- Cấu trúc bảng cho bảng `layout_social_media_links`
 --
 
 CREATE TABLE `layout_social_media_links` (
-  `id` bigint UNSIGNED NOT NULL,
-  `platform` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `target` text COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `platform` varchar(50) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `target` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_social_media_links`
+-- Đang đổ dữ liệu cho bảng `layout_social_media_links`
 --
 
 INSERT INTO `layout_social_media_links` (`id`, `platform`, `url`, `target`, `created_at`, `updated_at`) VALUES
@@ -395,23 +414,23 @@ INSERT INTO `layout_social_media_links` (`id`, `platform`, `url`, `target`, `cre
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_space`
+-- Cấu trúc bảng cho bảng `layout_space`
 --
 
 CREATE TABLE `layout_space` (
-  `id` bigint UNSIGNED NOT NULL,
-  `icon` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description_one` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_two` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_three` text COLLATE utf8mb4_general_ci NOT NULL,
-  `description_four` text COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description_one` text NOT NULL,
+  `description_two` text NOT NULL,
+  `description_three` text NOT NULL,
+  `description_four` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_space`
+-- Đang đổ dữ liệu cho bảng `layout_space`
 --
 
 INSERT INTO `layout_space` (`id`, `icon`, `title`, `description_one`, `description_two`, `description_three`, `description_four`, `created_at`, `updated_at`) VALUES
@@ -421,63 +440,63 @@ INSERT INTO `layout_space` (`id`, `icon`, `title`, `description_one`, `descripti
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_story`
+-- Cấu trúc bảng cho bảng `layout_story`
 --
 
 CREATE TABLE `layout_story` (
-  `id` bigint UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description_one` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `description_two` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description_one` longtext NOT NULL,
+  `description_two` longtext NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_story`
+-- Đang đổ dữ liệu cho bảng `layout_story`
 --
 
 INSERT INTO `layout_story` (`id`, `title`, `description_one`, `description_two`, `created_at`, `updated_at`) VALUES
-(1, 'Câu Chuyện Của Chúng Tôi', 'Nhà hàng Hải Sản Minh Thuận được thành lập từ năm 2003, khởi đầu là một quán ăn nhỏ với tâm huyết mang đến những món hải sản tươi ngon nhất cho thực khách. Qua hơn 20 năm phát triển, chúng tôi đã trở thành một trong những nhà hàng hải sản uy tín nhất trong khu vực.', 'Với sự phát triển của công nghệ, chúng tôi đã mở rộng dịch vụ sang mảng đặt hàng trực tuyến và giao hàng tận nơi, giúp thực khách có thể thưởng thức các món ăn ngon của nhà hàng ngay tại nhà.', '2025-03-03 23:09:07', '2025-03-05 10:29:09');
+(1, 'Câu Chuyện Của Chúng Tôi 11', 'Nhà hàng Hải Sản Minh Thuận được thành lập từ năm 2003, khởi đầu là một quán ăn nhỏ với tâm huyết mang đến những món hải sản tươi ngon nhất cho thực khách. Qua hơn 20 năm phát triển, chúng tôi đã trở thành một trong những nhà hàng hải sản uy tín nhất trong khu vực.', 'Với sự phát triển của công nghệ, chúng tôi đã mở rộng dịch vụ sang mảng đặt hàng trực tuyến và giao hàng tận nơi, giúp thực khách có thể thưởng thức các món ăn ngon của nhà hàng ngay tại nhà.', '2025-03-03 23:09:07', '2025-03-09 23:19:30');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `layout_website_brand`
+-- Cấu trúc bảng cho bảng `layout_website_brand`
 --
 
 CREATE TABLE `layout_website_brand` (
-  `id` int NOT NULL,
-  `logo_url` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `brand_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `alt_text` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `id` int(11) NOT NULL,
+  `logo_url` longtext NOT NULL,
+  `brand_name` varchar(100) NOT NULL,
+  `alt_text` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `layout_website_brand`
+-- Đang đổ dữ liệu cho bảng `layout_website_brand`
 --
 
 INSERT INTO `layout_website_brand` (`id`, `logo_url`, `brand_name`, `alt_text`) VALUES
-(1, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741257963/yj7dvm6ysxedc6arlrrr.png', 'Hải sản', 'Logo web bán hải sản');
+(1, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741562747/qiqbagknwfpmrjobn2po.png', 'Hải sản 1', 'Logo web bán hải sản');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `news`
+-- Cấu trúc bảng cho bảng `news`
 --
 
 CREATE TABLE `news` (
-  `id` bigint UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `image_url` longtext COLLATE utf8mb4_general_ci NOT NULL,
-  `status` tinyint(1) DEFAULT '1',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` longtext NOT NULL,
+  `image_url` longtext NOT NULL,
+  `status` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `news`
+-- Đang đổ dữ liệu cho bảng `news`
 --
 
 INSERT INTO `news` (`id`, `title`, `description`, `image_url`, `status`, `created_at`, `updated_at`) VALUES
@@ -486,48 +505,70 @@ INSERT INTO `news` (`id`, `title`, `description`, `image_url`, `status`, `create
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permission`
+-- Cấu trúc bảng cho bảng `permission`
 --
 
 CREATE TABLE `permission` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `permission`
+-- Đang đổ dữ liệu cho bảng `permission`
 --
 
 INSERT INTO `permission` (`id`, `name`) VALUES
-(1, 'get_new'),
-(2, 'detail_new'),
-(3, 'delete_new'),
-(4, 'post_new'),
-(5, 'put_new');
+(2, 'get_user'),
+(3, 'post_user'),
+(4, 'put_user'),
+(5, 'delete_user'),
+(6, 'get_new'),
+(7, 'post_new'),
+(8, 'put_new'),
+(9, 'delete_new'),
+(10, 'put_product'),
+(11, 'post_product'),
+(12, 'delete_product'),
+(13, 'put_footer'),
+(14, 'post_footer'),
+(15, 'delete_footer'),
+(16, 'put_about'),
+(17, 'post_about'),
+(18, 'delete_about'),
+(19, 'put_header'),
+(20, 'post_header'),
+(21, 'delete_header'),
+(22, 'post_nav_logo'),
+(23, 'put_nav_logo'),
+(24, 'delete_nav_logo'),
+(25, 'post_role'),
+(26, 'put_role'),
+(27, 'delete_role'),
+(28, 'get_role');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Cấu trúc bảng cho bảng `products`
 --
 
 CREATE TABLE `products` (
-  `id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `price` int NOT NULL,
-  `quantity_sold` int DEFAULT '0',
-  `quantity` int DEFAULT '0',
-  `star` int DEFAULT '0',
-  `status` tinyint(1) DEFAULT '1',
-  `category` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'fish',
-  `hot` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` int(11) NOT NULL,
+  `quantity_sold` int(11) DEFAULT 0,
+  `quantity` int(11) DEFAULT 0,
+  `star` int(11) DEFAULT 0,
+  `status` tinyint(1) DEFAULT 1,
+  `category` varchar(255) NOT NULL DEFAULT 'fish',
+  `hot` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `products`
+-- Đang đổ dữ liệu cho bảng `products`
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity_sold`, `quantity`, `star`, `status`, `category`, `hot`, `created_at`, `updated_at`) VALUES
@@ -561,18 +602,18 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity_sold`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_images`
+-- Cấu trúc bảng cho bảng `product_images`
 --
 
 CREATE TABLE `product_images` (
-  `id` int NOT NULL,
-  `product_id` int NOT NULL,
-  `image_url` varchar(255) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'https://picsum.photos/200',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `image_url` varchar(255) NOT NULL DEFAULT 'https://picsum.photos/200',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `product_images`
+-- Đang đổ dữ liệu cho bảng `product_images`
 --
 
 INSERT INTO `product_images` (`id`, `product_id`, `image_url`, `created_at`) VALUES
@@ -658,147 +699,235 @@ INSERT INTO `product_images` (`id`, `product_id`, `image_url`, `created_at`) VAL
 -- --------------------------------------------------------
 
 --
--- Table structure for table `role`
+-- Cấu trúc bảng cho bảng `role`
 --
 
 CREATE TABLE `role` (
-  `id` int NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `role`
+-- Đang đổ dữ liệu cho bảng `role`
 --
 
-INSERT INTO `role` (`id`, `name`) VALUES
-(1, 'admin'),
-(2, 'user');
+INSERT INTO `role` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'admin', '2025-03-09 20:18:21', '2025-03-09 20:18:21'),
+(2, 'user', '2025-03-09 20:18:21', '2025-03-09 20:18:21'),
+(3, 'super_admin', '2025-03-09 20:18:21', '2025-03-09 20:18:21'),
+(28, 'nhan_vien1', '2025-03-09 20:27:31', '2025-03-09 20:27:31'),
+(29, 'thu_ngan', '2025-03-09 20:58:39', '2025-03-09 20:58:39');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `role_permission`
+-- Cấu trúc bảng cho bảng `role_permission`
 --
 
 CREATE TABLE `role_permission` (
-  `role_id` int NOT NULL,
-  `permission_id` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `role_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `role_permission`
+-- Đang đổ dữ liệu cho bảng `role_permission`
 --
 
 INSERT INTO `role_permission` (`role_id`, `permission_id`) VALUES
-(1, 1),
 (1, 2),
 (1, 3),
 (1, 4),
 (1, 5),
-(2, 1);
+(3, 2),
+(3, 3),
+(3, 4),
+(3, 5),
+(3, 6),
+(3, 7),
+(3, 8),
+(3, 9),
+(3, 10),
+(3, 11),
+(3, 12),
+(3, 13),
+(3, 14),
+(3, 15),
+(3, 16),
+(3, 17),
+(3, 18),
+(3, 19),
+(3, 20),
+(3, 21),
+(3, 22),
+(3, 23),
+(3, 24),
+(3, 25),
+(3, 26),
+(3, 27),
+(3, 28),
+(28, 2),
+(29, 2),
+(29, 19),
+(29, 20),
+(29, 21);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Cấu trúc bảng cho bảng `user`
 --
 
 CREATE TABLE `user` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `fullName` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
-  `role_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `role_id` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `user`
+-- Đang đổ dữ liệu cho bảng `user`
 --
 
-INSERT INTO `user` (`id`, `fullName`, `email`, `password`, `role_id`) VALUES
-(1, 'test', 'test@gmail.com', '$2y$10$COQlQ0D80KMbcweXCCN8tOaCrtdTscMbojM.iFY4LJizUg6nGxRpi', 1),
-(2, 'test2', 'test2@gmail.com', '$2y$10$VChLOl55tXXaFzq3tDlJtufOixlb.9YxfaC7m90uDYwPtt.CqnYy.', 2);
+INSERT INTO `user` (`id`, `fullName`, `email`, `avatar`, `password`, `role_id`, `status`, `created_at`, `updated_at`) VALUES
+(3, 'Nguyễn Minh Thuận', 'thuan18092003@gmail.com', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg', '$2y$10$StIjaXQgqcfafCqVwM2.G.OtuIdX605W93NpBDuUYVrIHaj.6TUGC', 3, 0, '2025-03-09 16:10:52', '2025-03-09 16:15:51'),
+(16, 'admin1', 'admin@gmail.com', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg', '$2y$10$OCZQbh7fL0gQuJ9C.5.tEuCudPUpZxoDEw2AFfU4HI7oldv34BDf6', 29, 0, '2025-03-09 22:50:47', '2025-03-09 22:51:29');
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `layout_social_media_links`
+-- Chỉ mục cho bảng `blacklisted_tokens`
+--
+ALTER TABLE `blacklisted_tokens`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `layout_customer_choose_item_section`
+--
+ALTER TABLE `layout_customer_choose_item_section`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `layout_navigation_menu`
+--
+ALTER TABLE `layout_navigation_menu`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `layout_slide_header`
+--
+ALTER TABLE `layout_slide_header`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `layout_social_media_links`
 --
 ALTER TABLE `layout_social_media_links`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `permission`
+-- Chỉ mục cho bảng `permission`
 --
 ALTER TABLE `permission`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `role`
+-- Chỉ mục cho bảng `role`
 --
 ALTER TABLE `role`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `role_permission`
+-- Chỉ mục cho bảng `role_permission`
 --
 ALTER TABLE `role_permission`
-  ADD KEY `fk_role_permission_role` (`role_id`),
+  ADD PRIMARY KEY (`role_id`,`permission_id`),
   ADD KEY `fk_role_permission_permission` (`permission_id`);
 
 --
--- Indexes for table `user`
+-- Chỉ mục cho bảng `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
   ADD KEY `fk_user_role` (`role_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `layout_social_media_links`
+-- AUTO_INCREMENT cho bảng `blacklisted_tokens`
+--
+ALTER TABLE `blacklisted_tokens`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT cho bảng `layout_customer_choose_item_section`
+--
+ALTER TABLE `layout_customer_choose_item_section`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT cho bảng `layout_navigation_menu`
+--
+ALTER TABLE `layout_navigation_menu`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT cho bảng `layout_slide_header`
+--
+ALTER TABLE `layout_slide_header`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT cho bảng `layout_social_media_links`
 --
 ALTER TABLE `layout_social_media_links`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `permission`
+-- AUTO_INCREMENT cho bảng `permission`
 --
 ALTER TABLE `permission`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT for table `role`
+-- AUTO_INCREMENT cho bảng `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `role_permission`
+-- Các ràng buộc cho bảng `role_permission`
 --
 ALTER TABLE `role_permission`
   ADD CONSTRAINT `fk_role_permission_permission` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_role_permission_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `user`
+-- Các ràng buộc cho bảng `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

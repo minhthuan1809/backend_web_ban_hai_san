@@ -9,33 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Lấy token từ header Authorization
-$headers = apache_request_headers();
-$auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
-
-// Kiểm tra xem token có hợp lệ không
-if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
-    $token = $matches[1];
-}
-
-// Đọc API_KEY_TOKEN từ file .env
-$api_key_token = '';
-$env_file_path = __DIR__ . '/../../../.env';
-if (file_exists($env_file_path)) {
-    $env_content = file_get_contents($env_file_path);
-    if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
-        $api_key_token = trim($matches[1]);
-    }
-} else {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Không tìm thấy file .env"
-    ]);
-    exit;
-}
-
 // Kiểm tra token
 if ($token !== $api_key_token) {
     echo json_encode([

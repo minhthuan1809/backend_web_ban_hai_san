@@ -1,56 +1,37 @@
 <?php
 // [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/logo
+require_once __DIR__ . '/../core/middleware/PermissionMiddleware.php';
+require_once __DIR__ . '/../config/TokenUtils.php';
+
 header('Content-Type: application/json');
 
-// Kiểm tra phương thức request
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Phương thức " . $_SERVER['REQUEST_METHOD'] . " không được hỗ trợ"
-    ]);
-    exit;
-}
-
-// Sửa đường dẫn file config
-require_once __DIR__ . '/../config/db.php';
-
-if (!isset($conn) || !($conn instanceof mysqli)) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Không thể kết nối đến cơ sở dữ liệu"
-    ]);
-    exit;
-}
-
-// Lấy token từ header Authorization
-$headers = apache_request_headers();
-$auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
-
-if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
-    $token = $matches[1];
-}
-
-// Đọc API_KEY_TOKEN từ file .env
-$env_content = file_get_contents(__DIR__ . '/../.env');
-$api_key_token = '';
-if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
-    $api_key_token = trim($matches[1]);
-}
-
-// Kiểm tra token
-if ($token !== $api_key_token) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "auth failed"
-    ]);
-    exit;
-}
-
 try {
+    // Lấy user_id từ token
+    $userId = TokenUtils::validateTokenAndGetUserId();
+
+    // Khởi tạo permission middleware
+    $permissionMiddleware = new PermissionMiddleware();
+
+    // Kiểm tra quyền truy cập
+    $permissionMiddleware->authorize($userId, 'put_nav_logo');
+
+    // Kiểm tra phương thức request
+    if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+        echo json_encode([
+            "ok" => false,
+            "success" => false,
+            "message" => "Phương thức " . $_SERVER['REQUEST_METHOD'] . " không được hỗ trợ"
+        ]);
+        exit;
+    }
+
+    // Kết nối database
+    require_once __DIR__ . '/../config/db.php';
+
+    if (!isset($conn) || !($conn instanceof mysqli)) {
+        throw new Exception("Không thể kết nối đến cơ sở dữ liệu");
+    }
+
     // Tạo bảng website_brand nếu chưa tồn tại
     $create_table_sql = "CREATE TABLE IF NOT EXISTS layout_Website_Brand (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -83,7 +64,7 @@ try {
         throw new Exception("Thiếu thông tin cần thiết");
     }
 
-    // Cập nhật trực tiếp không cần kiểm tra từng trường
+    // Cập nhật dữ liệu
     $sql = "UPDATE layout_Website_Brand SET brand_name = ?, logo_url = ?, alt_text = ? WHERE id = 1";
     
     $stmt = $conn->prepare($sql);
@@ -91,12 +72,7 @@ try {
         throw new Exception("Lỗi chuẩn bị câu lệnh: " . $conn->error);
     }
 
-    // Gán giá trị từ dữ liệu request
-    $brand_name = $data['brand_name'];
-    $logo_url = $data['logo_url'];
-    $alt_text = $data['alt_text'];
-
-    $stmt->bind_param("sss", $brand_name, $logo_url, $alt_text);
+    $stmt->bind_param("sss", $data['brand_name'], $data['logo_url'], $data['alt_text']);
     
     if ($stmt->execute()) {
         echo json_encode([
@@ -109,11 +85,13 @@ try {
     }
 
 } catch (Exception $e) {
+    http_response_code(401);
     echo json_encode([
         "ok" => false,
         "success" => false,
-        "message" => "Lỗi: " . $e->getMessage()
+        "message" => $e->getMessage()
     ]);
+    exit;
 } finally {
     if (isset($stmt) && $stmt !== false) {
         $stmt->close();

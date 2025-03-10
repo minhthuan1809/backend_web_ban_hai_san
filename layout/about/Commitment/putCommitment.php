@@ -15,40 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
 // Sửa đường dẫn file config
 require_once __DIR__ . '/../../../config/db.php'; // Đã sửa đường dẫn
 
-if (!isset($conn) || !($conn instanceof mysqli)) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Không thể kết nối đến cơ sở dữ liệu"
-    ]);
-    exit;
-}
 
-// Lấy token từ header Authorization
-$headers = apache_request_headers();
-$auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
-
-if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
-    $token = $matches[1];
-}
-
-// Đọc API_KEY_TOKEN từ file .env
-$env_content = file_get_contents(__DIR__ . '/../../../.env');
-$api_key_token = '';
-if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
-    $api_key_token = trim($matches[1]);
-}
-
-// Kiểm tra token
-if ($token !== $api_key_token) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Xác thực thất bại"
-    ]);
-    exit;
-}
 
 try {
     // ID cố định là 1
