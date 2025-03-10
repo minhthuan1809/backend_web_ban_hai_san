@@ -1,7 +1,8 @@
 <?php
 // [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/about/
 header('Content-Type: application/json');
-
+require_once __DIR__ . '/../../core/middleware/PermissionMiddleware.php';
+require_once __DIR__ . '/../../config/TokenUtils.php';
 // Initialize permission middleware
 $permissionMiddleware = new PermissionMiddleware();
 // Kiểm tra phương thức request
