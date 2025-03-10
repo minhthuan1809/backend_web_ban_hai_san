@@ -49,7 +49,7 @@ try {
         throw new Exception("Lỗi truy vấn: " . $conn->error);
     }
 
-    $news = [];
+    $News = [];
     while ($row = $result->fetch_assoc()) {
         // Trích xuất nội dung bên trong thẻ HTML đầu tiên trong description
         preg_match_all('/<([^>]+)>(.*?)<\/\1>/', $row['description'], $matches);
@@ -62,9 +62,9 @@ try {
             $description_text = strip_tags($row['description']);
         }
 
-        $news[] = [
+        $News[] = [
             "id" => $row['id'],
-            "title" => $row['title'],
+            "title" => $row['title'], 
             "description" => $description_text,
             "image_url" => $row['image_url'],
             "created_at" => $row['created_at'],
@@ -76,7 +76,7 @@ try {
     echo json_encode([
         "ok" => true,
         "success" => true,
-        "data" => $news,
+        "data" => $News,
         "total_pages" => $total_pages
     ]);
 

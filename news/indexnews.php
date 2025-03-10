@@ -36,7 +36,7 @@ try {
         case 'DELETE':
             $userId = TokenUtils::validateTokenAndGetUserId();
             $permissionMiddleware->authorize($userId, 'delete_new');
-            include __DIR__ . '/deleteNew.php';
+            include __DIR__ . '/deleteNews.php';
             break;
 
         default:

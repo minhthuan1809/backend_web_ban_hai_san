@@ -1,5 +1,5 @@
 <?php
-// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/news/10
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/News/10
 header('Content-Type: application/json');
 
 // Kiểm tra phương thức request
@@ -35,7 +35,7 @@ try {
     }
 
     // Lấy bản ghi từ bảng News theo ID
-    $sql = "SELECT * FROM News WHERE id = $id";
+    $sql = "SELECT * FROM news WHERE id = $id";
     $result = $conn->query($sql);
 
     if ($result === false) {
@@ -46,12 +46,12 @@ try {
         throw new Exception("Không tìm thấy bài viết với ID: $id");
     }
 
-    $news = $result->fetch_assoc();
+    $News = $result->fetch_assoc();
 
     echo json_encode([
         "ok" => true,
         "success" => true,
-        "data" => $news
+        "data" => $News
     ]);
 
 } catch (Exception $e) {

@@ -65,7 +65,7 @@ try {
     }
 
     // Chuẩn bị câu lệnh SQL
-    $sql = "INSERT INTO News (title, description, image_url, status) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO news (title, description, image_url, status) VALUES (?, ?, ?, ?)";
     
     // Gán giá trị mặc định nếu không được cung cấp
     $status = isset($data['status']) ? (bool)$data['status'] : true;
