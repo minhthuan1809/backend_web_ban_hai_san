@@ -20,7 +20,7 @@ else if (preg_match('/\/logo/', $request_uri)) {
 
 // [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/client.php/footer 
 else if (preg_match('/\/footer/', $request_uri)) {
-    include __DIR__ . '/layout/indexfooter.php';
+    include __DIR__ . '/layout/indexFooters.php';
 } 
 
 // [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/client.php/hero_section 
