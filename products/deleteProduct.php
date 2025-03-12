@@ -1,42 +1,6 @@
 <?php
-
+// [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/products/25
 header('Content-Type: application/json');
-
-// Lấy token từ header Authorization
-$headers = apache_request_headers();
-$auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
-
-if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
-    $token = $matches[1];
-}
-
-// Đọc API_KEY_TOKEN từ file .env
-$env_content = file_get_contents(__DIR__ . '/../.env');
-$api_key_token = '';
-if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
-    $api_key_token = trim($matches[1]);
-}
-
-// Kiểm tra token
-if ($token !== $api_key_token) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Lỗi xác thực "
-    ]);
-    exit;
-}
-
-// Kiểm tra phương thức request
-if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Phương thức " . $_SERVER['REQUEST_METHOD'] . " không được hỗ trợ"
-    ]);
-    exit;
-}
 
 // Sửa đường dẫn để phù hợp với cấu trúc thư mục
 require_once __DIR__ . '/../config/db.php';
@@ -60,29 +24,49 @@ try {
         throw new Exception("ID không hợp lệ");
     }
 
-    // Xóa tất cả hình ảnh theo ID sản phẩm
-    $sql_delete_images = "DELETE FROM product_images WHERE product_id = ?";
-    $stmt_images = $conn->prepare($sql_delete_images);
-    $stmt_images->bind_param("i", $id);
+    // Kiểm tra xem sản phẩm có tồn tại không
+    $check_sql = "SELECT id FROM products WHERE id = $id";
+    $result = $conn->query($check_sql);
     
-    if ($stmt_images->execute() === false) {
-        throw new Exception("Lỗi truy vấn xóa hình ảnh: " . $stmt_images->error);
+    if ($result->num_rows === 0) {
+        echo json_encode([
+            "ok" => false,
+            "success" => false,
+            "message" => "Không tìm thấy sản phẩm với ID này"
+        ]);
+        exit;
     }
 
-    // Xóa bản ghi từ bảng sản phẩm theo ID
-    $sql_delete_product = "DELETE FROM products WHERE id = ?";
-    $stmt_product = $conn->prepare($sql_delete_product);
-    $stmt_product->bind_param("i", $id);
-    
-    if ($stmt_product->execute() === false) {
-        throw new Exception("Lỗi truy vấn xóa sản phẩm: " . $stmt_product->error);
-    }
+    // Bắt đầu transaction
+    $conn->begin_transaction();
 
-    echo json_encode([
-        "ok" => true,
-        "success" => true,
-        "message" => "Sản phẩm xóa thành công"
-    ]);
+    try {
+        // Xóa hình ảnh sản phẩm trước
+        $delete_images_sql = "DELETE FROM product_images WHERE product_id = $id";
+        if (!$conn->query($delete_images_sql)) {
+            throw new Exception("Không thể xóa hình ảnh sản phẩm");
+        }
+
+        // Sau đó xóa sản phẩm
+        $delete_product_sql = "DELETE FROM products WHERE id = $id";
+        if (!$conn->query($delete_product_sql)) {
+            throw new Exception("Không thể xóa sản phẩm");
+        }
+
+        // Commit transaction nếu mọi thứ thành công
+        $conn->commit();
+
+        echo json_encode([
+            "ok" => true,
+            "success" => true,
+            "message" => "Xóa sản phẩm thành công"
+        ]);
+
+    } catch (Exception $e) {
+        // Rollback nếu có lỗi
+        $conn->rollback();
+        throw $e;
+    }
 
 } catch (Exception $e) {
     echo json_encode([
@@ -91,11 +75,8 @@ try {
         "message" => $e->getMessage()
     ]);
 } finally {
-    if (isset($stmt_images)) {
-        $stmt_images->close();
-    }
-    if (isset($stmt_product)) {
-        $stmt_product->close();
+    if (isset($result)) {
+        $result->close();
     }
     if (isset($conn)) {
         $conn->close();

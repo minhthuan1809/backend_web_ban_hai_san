@@ -1,11 +1,17 @@
 <?php
-// [GET] [PUT] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/products/1
+// [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/products/1
+require_once __DIR__ . '/../core/middleware/PermissionMiddleware.php';
+require_once __DIR__ . '/../config/TokenUtils.php';
+
 header('Content-Type: application/json');
 
+// Khởi tạo permission middleware
+$permissionMiddleware = new PermissionMiddleware();
+
+$request_uri = $_SERVER['REQUEST_URI'];
 // Kiểm tra phương thức request
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-     $request_uri = $_SERVER['REQUEST_URI'];
         if (preg_match('/\/products\/\d+$/', $request_uri)) {
             include __DIR__ . '/detailProduct.php';
         } else {
@@ -15,16 +21,31 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'PUT':
+        $userId = TokenUtils::validateTokenAndGetUserId();
+        $permissionMiddleware->authorize($userId, 'put_product');
         include __DIR__ . '/putProduct.php';
         break;
    
     case 'POST':
-        include __DIR__ . '/postProduct.php';
+        $userId = TokenUtils::validateTokenAndGetUserId();
+        $permissionMiddleware->authorize($userId, 'post_product');
+        if (preg_match('/\/products\/img\/\d+$/', $request_uri)) {
+            include __DIR__ . '/AddImgProduct.php';
+          
+        } else {
+            include __DIR__ . '/postProduct.php';
+        }
         
         break;
 
     case 'DELETE':
-        include __DIR__ . '/deleteProduct.php';
+        $userId = TokenUtils::validateTokenAndGetUserId();
+        $permissionMiddleware->authorize($userId, 'delete_product');
+        if (preg_match('/\/products\/img\/\d+$/', $request_uri)) {
+            include __DIR__ . '/deleteImgProduct.php';
+        } else {
+          include __DIR__ . '/deleteProduct.php';
+        }
         break;
     default:
         echo json_encode([

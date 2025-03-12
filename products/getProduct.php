@@ -2,42 +2,6 @@
 // [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/products
 header('Content-Type: application/json');
 
-// Kiểm tra phương thức request
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Phương thức " . $_SERVER['REQUEST_METHOD'] . " không được hỗ trợ"
-    ]);
-    exit;
-}
-
-// Lấy token từ header Authorization
-$headers = apache_request_headers();
-$auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
-
-if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
-    $token = $matches[1];
-}
-
-// Đọc API_KEY_TOKEN từ file .env
-$env_content = file_get_contents(__DIR__ . '/../.env');
-$api_key_token = '';
-if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
-    $api_key_token = trim($matches[1]);
-}
-
-// Kiểm tra token
-if ($token !== $api_key_token) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Lỗi xác thực "
-    ]);
-    exit;
-}
-
 // Sửa đường dẫn để phù hợp với cấu trúc thư mục
 require_once __DIR__ . '/../config/db.php';
 
@@ -53,7 +17,7 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 try {
     // Lấy tham số page, limit và search từ URL
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 2; // Đặt limit là 2 như yêu cầu
+    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 20; // Đặt limit là 2 như yêu cầu
     $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
     $offset = ($page - 1) * $limit;
 
@@ -92,10 +56,13 @@ try {
     if (!empty($product_ids)) {
         $product_ids_str = implode(',', $product_ids);
         
-        // Lấy thông tin chi tiết của các sản phẩm và hình ảnh
-        $product_sql = "SELECT p.*, pi.image_url 
+        // Lấy thông tin chi tiết của các sản phẩm và hình ảnh đầu tiên
+        $product_sql = "SELECT p.*, 
+                        (SELECT pi.image_url 
+                         FROM product_images pi 
+                         WHERE pi.product_id = p.id 
+                         LIMIT 1) as image_url
                         FROM products p 
-                        LEFT JOIN product_images pi ON p.id = pi.product_id 
                         WHERE p.id IN ($product_ids_str) 
                         ORDER BY p.created_at DESC";
                         
@@ -105,39 +72,28 @@ try {
         }
 
         while ($row = $product_result->fetch_assoc()) {
-            $product_id = $row['id'];
-            if (!isset($products[$product_id])) {
-                $products[$product_id] = [
-                    "id" => $row['id'],
-                    "name" => $row['name'],
-                    "description" => $row['description'],
-                    "price" => number_format($row['price'], 0, ',', '.') . ' ₫',
-                    "quantity_sold" => $row['quantity_sold'],
-                    "status" => $row['status'] == 1 ? true : false,
-                    "category" => $row['category'],
-                    "hot" => $row['hot'] == 1 ? true : false,
-                    "star" => $row['star'],
-                    "quantity" => $row['quantity'],
-                    "created_at" => $row['created_at'],
-                    "updated_at" => $row['updated_at'],
-                    "images" => []
-                ];
-            }
-            if ($row['image_url']) {
-                $products[$product_id]['images'][] = $row['image_url'];
-            }
-        }
-
-        // Hiện thị tất cả hình ảnh của sản phẩm
-        foreach ($products as &$product) {
-            $product['images'] = array_unique($product['images']); // Đảm bảo không có hình ảnh trùng lặp
+            $products[] = [
+                "id" => $row['id'],
+                "name" => $row['name'],
+                "description" => $row['description'],
+                "price" => number_format($row['price'], 0, ',', '.') . ' ₫',
+                "quantity_sold" => $row['quantity_sold'],
+                "status" => $row['status'] == 0 ? false : true,
+                "category" => $row['category'],
+                "hot" => $row['hot'] == 1 ? true : false,
+                "star" => $row['star'],
+                "quantity" => $row['quantity'],
+                "created_at" => $row['created_at'],
+                "updated_at" => $row['updated_at'],
+                "images" => $row['image_url'] // Sử dụng ảnh mặc định nếu không có
+            ];
         }
     }
 
     echo json_encode([
         "ok" => true,
         "success" => true,
-        "data" => array_values($products),
+        "data" => $products,
         "total_pages" => $total_pages,
         "total_records" => $total_records,
         "current_page" => $page,

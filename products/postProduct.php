@@ -11,7 +11,6 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
     exit;
 }
 
-
 try {
     // Lấy dữ liệu từ request
     $data = json_decode(file_get_contents("php://input"), true);
@@ -27,7 +26,7 @@ try {
     }
 
     // Thông báo khi dữ liệu không có
-    if (!isset($data['name']) || !isset($data['description']) || !isset($data['price']) || !isset($data['stock']) || !isset($data['status']) || !isset($data['category']) || !isset($data['hot']) || !isset($data['quantity'])) {
+    if (!isset($data['name']) || !isset($data['description']) || !isset($data['price']) || !isset($data['status']) || !isset($data['category']) || !isset($data['hot']) || !isset($data['quantity'])) {
         echo json_encode([
             "ok" => false,
             "success" => false,
@@ -35,7 +34,6 @@ try {
         ]);
         exit;
     }
-   
 
     // Kiểm tra từng trường dữ liệu có trống không
     if (empty($data['name'])) {
@@ -65,32 +63,36 @@ try {
         exit;
     }
 
-    if (!isset($data['stock'])) {
+    if (!isset($data['quantity']) || $data['quantity'] <= 0) {
         echo json_encode([
             "ok" => false,
             "success" => false,
-            "message" => "Số lượng sản phẩm không được để trống"
+            "message" => "Số lượng sản phẩm không hợp lệ"
         ]);
         exit;
     }
 
     // Chuẩn bị câu lệnh SQL
-    $sql = "INSERT INTO products (name, description, price, stock, status, category, hot, quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO products (name, description, price, status, category, hot, quantity) VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     // Chuẩn bị và thực thi câu lệnh
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         throw new Exception("Lỗi chuẩn bị câu lệnh: " . $conn->error);
     }
+
+    // Chuyển đổi giá trị boolean thành số nguyên
+    $status = $data['status'] ? 1 : 0;
+    $hot = $data['hot'] ? 1 : 0;
+    $price = (int)str_replace(['.',',','₫',' '], '', $data['price']);
     
-    $stmt->bind_param("ssdissii", 
+    $stmt->bind_param("ssiisii", 
         $data['name'], 
         $data['description'],
-        $data['price'],
-        $data['stock'],
-        $data['status'],
+        $price,
+        $status,
         $data['category'],
-        $data['hot'],
+        $hot,
         $data['quantity']
     );
     
@@ -99,8 +101,8 @@ try {
         $product_id = $conn->insert_id;
 
         // Kiểm tra nếu có hình ảnh trong dữ liệu gửi lên
-        if (isset($data['img']) && is_array($data['img'])) {
-            foreach ($data['img'] as $image_url) {
+        if (isset($data['images']) && is_array($data['images'])) {
+            foreach ($data['images'] as $image_url) {
                 // Thêm hình ảnh vào bảng product_images
                 $image_sql = "INSERT INTO product_images (product_id, image_url) VALUES (?, ?)";
                 $image_stmt = $conn->prepare($image_sql);

@@ -12,31 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// Lấy token từ header Authorization
-$headers = apache_request_headers();
-$auth_header = isset($headers['Authorization']) ? $headers['Authorization'] : '';
-$token = '';
-
-if (preg_match('/Bearer\s+(.*)$/i', $auth_header, $matches)) {
-    $token = $matches[1];
-}
-
-// Đọc API_KEY_TOKEN từ file .env
-$env_content = file_get_contents(__DIR__ . '/../.env');
-$api_key_token = '';
-if (preg_match('/API_KEY_TOKEN=(.*)/', $env_content, $matches)) {
-    $api_key_token = trim($matches[1]);
-}
-
-// Kiểm tra token
-if ($token !== $api_key_token) {
-    echo json_encode([
-        "ok" => false,
-        "success" => false,
-        "message" => "Lỗi xác thực "
-    ]);
-    exit;
-}
 
 // Sửa đường dẫn để phù hợp với cấu trúc thư mục
 require_once __DIR__ . '/../config/db.php';
@@ -80,7 +55,7 @@ try {
 
     if ($product) {
         // Lấy tất cả hình ảnh của sản phẩm
-        $images_sql = "SELECT image_url FROM product_images WHERE product_id = ?";
+        $images_sql = "SELECT id, image_url FROM product_images WHERE product_id = ?";
         $stmt_images = $conn->prepare($images_sql);
         $stmt_images->bind_param("i", $product_id);
         $stmt_images->execute();
@@ -88,7 +63,10 @@ try {
 
         $images = [];
         while ($image_row = $images_result->fetch_assoc()) {
-            $images[] = $image_row['image_url'];
+            $images[] = [
+                "id" => $image_row['id'],
+                "image_url" => $image_row['image_url']
+            ];
         }
 
         echo json_encode([
@@ -102,7 +80,7 @@ try {
                 "quantity_sold" => $product['quantity_sold'],
                 "quantity" => $product['quantity'],
                 "star" => $product['star'],
-                "status" => (int)$product['status'],
+                "status" => (int)$product['status'] == 1 ? true : false,
                 "category" => $product['category'],
                 "hot" => (int)$product['hot'],
                 "created_at" => $product['created_at'],
