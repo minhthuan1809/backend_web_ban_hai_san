@@ -95,6 +95,11 @@ else if (preg_match('/\/role/', $request_uri)) {
     include __DIR__ . '/role/indexRole.php';
 }
 
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/ads
+else if (preg_match('/\/ads/', $request_uri)) {
+    include __DIR__ . '/adshomepage/indexAds.php';
+}
+
 
 
 else {

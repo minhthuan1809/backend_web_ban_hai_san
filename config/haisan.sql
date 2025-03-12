@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: localhost
--- Thời gian đã tạo: Th3 10, 2025 lúc 05:22 AM
--- Phiên bản máy phục vụ: 10.6.21-MariaDB-ubu2204
--- Phiên bản PHP: 8.2.27
+-- Host: localhost
+-- Generation Time: Mar 12, 2025 at 06:40 AM
+-- Server version: 10.6.21-MariaDB-ubu2204
+-- PHP Version: 8.2.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,36 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `haisan`
+-- Database: `haisan`
 --
 
 -- --------------------------------------------------------
+-- Modify table structure to add mobile_image_url field
+CREATE TABLE `layout_ads` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `image_url` longtext NOT NULL,
+  `mobile_image_url` longtext DEFAULT NULL,
+  `title` varchar(255) DEFAULT '',
+  `is_active` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Insert sample data with both desktop and mobile images
+INSERT INTO `layout_ads` (`id`, `image_url`, `mobile_image_url`, `title`, `is_active`, `created_at`, `updated_at`) 
+VALUES (
+  1, 
+  'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669336/efkmzxfkbubimvqab44l.jpg', 
+  'https://res.cloudinary.com/dsoj3y7wu/image/upload/c_scale,w_600/v1741669336/efkmzxfkbubimvqab44l.jpg', 
+  'ads 1', 
+  1, 
+  '2025-03-12 06:40:36', 
+  '2025-03-12 06:40:36'
+);
 --
--- Cấu trúc bảng cho bảng `blacklisted_tokens`
+--
+-- Table structure for table `blacklisted_tokens`
 --
 
 CREATE TABLE `blacklisted_tokens` (
@@ -33,17 +56,19 @@ CREATE TABLE `blacklisted_tokens` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Đang đổ dữ liệu cho bảng `blacklisted_tokens`
+
+
+-- Dumping data for table `blacklisted_tokens`
 --
 
 INSERT INTO `blacklisted_tokens` (`id`, `token`, `created_at`) VALUES
-(11, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6InRodWFuMTgwOTIwMDNAZ21haWwuY29tIiwiaWF0IjoxNzQxNTgwMjU2LCJleHAiOjE3NDE1ODM4NTZ9.cvaD34fZ0cSoZw-1N9hmfS1vHEJ3PKd9wYkdd2jrn8Y', '2025-03-10 05:16:48');
+(18, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6InRodWFuMTgwOTIwMDNAZ21haWwuY29tIiwiaWF0IjoxNzQxNzU4MDE0LCJleHAiOjE3NDE3NjE2MTR9.NmM8w2OTe7iiRqhNEuntZD415yYeYYNN34N0QJpTezw', '2025-03-12 05:47:30'),
+(19, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6InRodWFuMTgwOTIwMDNAZ21haWwuY29tIiwiaWF0IjoxNzQxNzYwNTk3LCJleHAiOjE3NDE3NjQxOTd9.xHAzXJq9Yjs1Nyov1JIa3Me6Udff-ikoBLrvv6AMqlc', '2025-03-12 06:30:24');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `contacts`
+-- Table structure for table `contacts`
 --
 
 CREATE TABLE `contacts` (
@@ -59,17 +84,18 @@ CREATE TABLE `contacts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `contacts`
+-- Dumping data for table `contacts`
 --
 
 INSERT INTO `contacts` (`id`, `name`, `content`, `gmail`, `title`, `is_read`, `is_sent`, `created_at`, `updated_at`) VALUES
 (2, 'thuan   ', 'thuan', 'thuan18092003@gmail.com', 'thuan', 1, 0, '2025-03-10 04:59:49', '2025-03-10 05:01:13'),
-(3, 'thuan   ', 'thuan', 'thuan18092003@gmail.com', 'thuan', 0, 0, '2025-03-10 05:16:34', '2025-03-10 05:16:34');
+(3, 'thuan   ', 'thuan', 'thuan18092003@gmail.com', 'thuan', 1, 0, '2025-03-10 05:16:34', '2025-03-10 07:01:27'),
+(4, 'Nguyễn Minh Thuận', 'hàng ngon mỗi tội không cho nước chấm ', 'thuan18092003@gmail.com', 'mua hàng', 1, 0, '2025-03-11 04:48:09', '2025-03-11 04:48:49');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_benefit`
+-- Table structure for table `layout_benefit`
 --
 
 CREATE TABLE `layout_benefit` (
@@ -82,7 +108,7 @@ CREATE TABLE `layout_benefit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_benefit`
+-- Dumping data for table `layout_benefit`
 --
 
 INSERT INTO `layout_benefit` (`id`, `icon`, `title`, `description`, `created_at`, `updated_at`) VALUES
@@ -94,7 +120,7 @@ INSERT INTO `layout_benefit` (`id`, `icon`, `title`, `description`, `created_at`
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_commitment`
+-- Table structure for table `layout_commitment`
 --
 
 CREATE TABLE `layout_commitment` (
@@ -109,7 +135,7 @@ CREATE TABLE `layout_commitment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_commitment`
+-- Dumping data for table `layout_commitment`
 --
 
 INSERT INTO `layout_commitment` (`id`, `title`, `description_one`, `description_two`, `description_three`, `description_four`, `created_at`, `updated_at`) VALUES
@@ -118,7 +144,7 @@ INSERT INTO `layout_commitment` (`id`, `title`, `description_one`, `description_
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_contactsfooter`
+-- Table structure for table `layout_contactsfooter`
 --
 
 CREATE TABLE `layout_contactsfooter` (
@@ -130,7 +156,7 @@ CREATE TABLE `layout_contactsfooter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_contactsfooter`
+-- Dumping data for table `layout_contactsfooter`
 --
 
 INSERT INTO `layout_contactsfooter` (`id`, `icon`, `type`, `created_at`, `updated_at`) VALUES
@@ -142,7 +168,7 @@ INSERT INTO `layout_contactsfooter` (`id`, `icon`, `type`, `created_at`, `update
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_copyright`
+-- Table structure for table `layout_copyright`
 --
 
 CREATE TABLE `layout_copyright` (
@@ -153,7 +179,7 @@ CREATE TABLE `layout_copyright` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_copyright`
+-- Dumping data for table `layout_copyright`
 --
 
 INSERT INTO `layout_copyright` (`id`, `text`, `created_at`, `updated_at`) VALUES
@@ -162,7 +188,7 @@ INSERT INTO `layout_copyright` (`id`, `text`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_customer_choose_item_section`
+-- Table structure for table `layout_customer_choose_item_section`
 --
 
 CREATE TABLE `layout_customer_choose_item_section` (
@@ -173,7 +199,7 @@ CREATE TABLE `layout_customer_choose_item_section` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_customer_choose_item_section`
+-- Dumping data for table `layout_customer_choose_item_section`
 --
 
 INSERT INTO `layout_customer_choose_item_section` (`id`, `icon`, `title`, `description`) VALUES
@@ -185,7 +211,7 @@ INSERT INTO `layout_customer_choose_item_section` (`id`, `icon`, `title`, `descr
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_customer_choose_section`
+-- Table structure for table `layout_customer_choose_section`
 --
 
 CREATE TABLE `layout_customer_choose_section` (
@@ -195,16 +221,16 @@ CREATE TABLE `layout_customer_choose_section` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_customer_choose_section`
+-- Dumping data for table `layout_customer_choose_section`
 --
 
 INSERT INTO `layout_customer_choose_section` (`id`, `title`, `image_url`) VALUES
-(1, 'Đây là lý do khách hàng thường chọn chúng tôi ', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740498965/bduiyctdoxey8pszwsyn.jpg');
+(1, 'Đây là lý do khách hàng thường chọn chúng tôi ', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669336/efkmzxfkbubimvqab44l.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_customer_section`
+-- Table structure for table `layout_customer_section`
 --
 
 CREATE TABLE `layout_customer_section` (
@@ -215,23 +241,23 @@ CREATE TABLE `layout_customer_section` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_customer_section`
+-- Dumping data for table `layout_customer_section`
 --
 
 INSERT INTO `layout_customer_section` (`id`, `name`, `image_url`, `description`) VALUES
-(8, 'Nguyễn Minh Thuận ', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740416201/jmuk2wda4x0i58tuofah.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
-(11, 'Nguyễn Huy Chiến', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740416219/sywqviwdl4xfoxdn4spo.jpg', 'Vừa bước vào nhà hàng Minh Thuận, tôi đã bị cuốn hút bởi không gian ấm cúng, sạch sẽ và có chút gì đó rất gần gũi. Mùi hương của những món ăn thơm lừng lan tỏa trong không khí khiến bụng tôi sôi lên réo rắt.\n\nTôi nhanh chóng gọi vài món đặc trưng của quán. Khi đĩa thức ăn được mang ra, tôi không thể không trầm trồ: trình bày đẹp mắt, hương thơm quyến rũ. Cắn một miếng, vị giác như bùng nổ! Gia vị nêm nếm vừa miệng, nguyên liệu tươi ngon, từng miếng thịt mềm tan trong miệng, nước sốt đậm đà, đúng chuẩn \"cực phẩm nhân gian\".'),
-(12, 'Lò Tiến Anh', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740416235/sfuj8sa9ahyfrkioerbz.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
-(13, 'Pham Văn Hiếu', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740417451/kcmyqphtrooxff1omafl.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
-(14, 'Nguyễn Thanh Nam', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740416405/g5eepwgefewr95sikiox.jpg', 'Ngồi xuống bàn, anh không ngần ngại gọi ngay những món đặc trưng của nhà hàng. Khi đĩa thức ăn được bưng ra, mắt anh sáng rực như tìm thấy kho báu. Mỗi miếng ăn đưa vào miệng đều là sự hòa quyện hoàn hảo giữa hương vị và cách nêm nếm tinh tế, khiến anh không thể ngừng lại. Đặc biệt, món \"đặc sản Minh Thuận\" với lớp vỏ giòn rụm, nhân mềm thơm đã khiến anh phải gật gù tán thưởng.\n\nKhông chỉ đồ ăn ngon, thái độ phục vụ cũng khiến anh hài lòng. Nhân viên nhanh nhẹn, niềm nở, sẵn sàng đáp ứng mọi yêu cầu của khách. Càng ăn,Máy Đớp càng cảm thấy mình đã tìm đúng nơi để thỏa mãn niềm đam mê ẩm thực.'),
-(15, 'Cưu Vân Long', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740416396/ahxjsz5vsjaxkybv4t61.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
-(18, 'Nguyễn Thị Ánh', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740417236/mvhkiwhjjhs3a3rxhyhz.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
-(19, 'Vũ Quang Huy', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740417508/kmzu6xqjl2ykrbc1s3lz.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.');
+(8, 'Nguyễn Minh Thuận ', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669180/ixnkmyctuxxxkwgktgjq.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
+(11, 'Nguyễn Huy Chiến', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669092/yt4ol6ahu72nopbike2l.jpg', 'Vừa bước vào nhà hàng Minh Thuận, tôi đã bị cuốn hút bởi không gian ấm cúng, sạch sẽ và có chút gì đó rất gần gũi. Mùi hương của những món ăn thơm lừng lan tỏa trong không khí khiến bụng tôi sôi lên réo rắt.\n\nTôi nhanh chóng gọi vài món đặc trưng của quán. Khi đĩa thức ăn được mang ra, tôi không thể không trầm trồ: trình bày đẹp mắt, hương thơm quyến rũ. Cắn một miếng, vị giác như bùng nổ! Gia vị nêm nếm vừa miệng, nguyên liệu tươi ngon, từng miếng thịt mềm tan trong miệng, nước sốt đậm đà, đúng chuẩn \"cực phẩm nhân gian\".'),
+(12, 'Lò Tiến Anh', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669102/mopckte6vqoypckwkowz.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
+(13, 'Pham Văn Hiếu', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669112/pt8iegycnjdangc4uatj.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
+(14, 'Nguyễn Thanh Nam', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669170/iidjp3kd6voacdwi4py2.jpg', 'Ngồi xuống bàn, anh không ngần ngại gọi ngay những món đặc trưng của nhà hàng. Khi đĩa thức ăn được bưng ra, mắt anh sáng rực như tìm thấy kho báu. Mỗi miếng ăn đưa vào miệng đều là sự hòa quyện hoàn hảo giữa hương vị và cách nêm nếm tinh tế, khiến anh không thể ngừng lại. Đặc biệt, món \"đặc sản Minh Thuận\" với lớp vỏ giòn rụm, nhân mềm thơm đã khiến anh phải gật gù tán thưởng.\n\nKhông chỉ đồ ăn ngon, thái độ phục vụ cũng khiến anh hài lòng. Nhân viên nhanh nhẹn, niềm nở, sẵn sàng đáp ứng mọi yêu cầu của khách. Càng ăn,Máy Đớp càng cảm thấy mình đã tìm đúng nơi để thỏa mãn niềm đam mê ẩm thực.'),
+(15, 'Đinh Thế Long', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669122/hfypozpxh1vdla5vnkbm.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
+(18, 'Nguyễn Thị Ánh', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669142/j3wh7flkptqezocjuxer.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.'),
+(19, 'Vũ Quang Huy', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669160/ousliun0o73hypblr82a.jpg', 'Nhà hàng có không gian thoáng đãng, món ăn chế biến tinh tế và nhân viên phục vụ chu đáo. Đặc biệt là các món hải sản tươi ngon khiến tôi muốn quay lại lần nữa.');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_customer_section_img`
+-- Table structure for table `layout_customer_section_img`
 --
 
 CREATE TABLE `layout_customer_section_img` (
@@ -241,16 +267,16 @@ CREATE TABLE `layout_customer_section_img` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_customer_section_img`
+-- Dumping data for table `layout_customer_section_img`
 --
 
 INSERT INTO `layout_customer_section_img` (`id`, `image_url`, `title`) VALUES
-(1, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740416033/cssio8csvlt3atdgsijg.webp', 'Khách hàng nói về chùng tôi `');
+(1, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669296/ko7hwee0xeyudqnskodx.webp', 'Khách hàng nói về chùng tôi ');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_introductionsfooter`
+-- Table structure for table `layout_introductionsfooter`
 --
 
 CREATE TABLE `layout_introductionsfooter` (
@@ -262,7 +288,7 @@ CREATE TABLE `layout_introductionsfooter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_introductionsfooter`
+-- Dumping data for table `layout_introductionsfooter`
 --
 
 INSERT INTO `layout_introductionsfooter` (`id`, `title`, `description`, `created_at`, `updated_at`) VALUES
@@ -271,7 +297,7 @@ INSERT INTO `layout_introductionsfooter` (`id`, `title`, `description`, `created
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_introductionssection`
+-- Table structure for table `layout_introductionssection`
 --
 
 CREATE TABLE `layout_introductionssection` (
@@ -283,16 +309,16 @@ CREATE TABLE `layout_introductionssection` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_introductionssection`
+-- Dumping data for table `layout_introductionssection`
 --
 
 INSERT INTO `layout_introductionssection` (`id`, `title`, `description`, `content`, `image_url`) VALUES
-(1, 'Minh Thuận', 'Nhà hàng hải sản Minh Thuận là điểm đến lý tưởng cho những tín đồ yêu thích hải sản tươi sống. Tọa lạc ngay sát bờ biển Bình Thuận, Minh Thuận tự hào mang đến nguồn hải sản tươi ngon nhất, được đánh bắt trực tiếp mỗi ngày. Với hơn 50 loại hải sản phong phú, chế biến theo công thức đặc biệt, chúng tôi mang đến những món ăn thơm ngon, đậm đà hương vị biển cả, khiến thực khách nhớ mãi không quên.', 'Tận hưởng hải sản chất lượng mà không phải lo về giá cả. Chúng tôi cam kết mang đến những sản phẩm tươi sạch, an toàn với mức giá hợp lý, cùng dịch vụ tận tâm.', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740419894/tcnprvj4ldlnmtd8hhfc.jpg');
+(1, 'Minh Thuận', 'Nhà hàng hải sản Minh Thuận là điểm đến lý tưởng cho những tín đồ yêu thích hải sản tươi sống. Tọa lạc ngay sát bờ biển Bình Thuận, Minh Thuận tự hào mang đến nguồn hải sản tươi ngon nhất, được đánh bắt trực tiếp mỗi ngày. Với hơn 50 loại hải sản phong phú, chế biến theo công thức đặc biệt, chúng tôi mang đến những món ăn thơm ngon, đậm đà hương vị biển cả, khiến thực khách nhớ mãi không quên.', 'Tận hưởng hải sản chất lượng mà không phải lo về giá cả. Chúng tôi cam kết mang đến những sản phẩm tươi sạch, an toàn với mức giá hợp lý, cùng dịch vụ tận tâm.', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669356/mcoywgpg6ixhteapp7uq.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_navigation_menu`
+-- Table structure for table `layout_navigation_menu`
 --
 
 CREATE TABLE `layout_navigation_menu` (
@@ -306,7 +332,7 @@ CREATE TABLE `layout_navigation_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_navigation_menu`
+-- Dumping data for table `layout_navigation_menu`
 --
 
 INSERT INTO `layout_navigation_menu` (`id`, `name`, `url`, `parent_id`, `order_position`, `is_active`, `is_visible`) VALUES
@@ -318,7 +344,7 @@ INSERT INTO `layout_navigation_menu` (`id`, `name`, `url`, `parent_id`, `order_p
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_ordering_online`
+-- Table structure for table `layout_ordering_online`
 --
 
 CREATE TABLE `layout_ordering_online` (
@@ -334,7 +360,7 @@ CREATE TABLE `layout_ordering_online` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_ordering_online`
+-- Dumping data for table `layout_ordering_online`
 --
 
 INSERT INTO `layout_ordering_online` (`id`, `icon`, `title`, `description_one`, `description_two`, `description_three`, `description_four`, `created_at`, `updated_at`) VALUES
@@ -344,7 +370,7 @@ INSERT INTO `layout_ordering_online` (`id`, `icon`, `title`, `description_one`, 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_ordering_process`
+-- Table structure for table `layout_ordering_process`
 --
 
 CREATE TABLE `layout_ordering_process` (
@@ -357,7 +383,7 @@ CREATE TABLE `layout_ordering_process` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_ordering_process`
+-- Dumping data for table `layout_ordering_process`
 --
 
 INSERT INTO `layout_ordering_process` (`id`, `icon`, `title`, `description`, `created_at`, `updated_at`) VALUES
@@ -368,7 +394,7 @@ INSERT INTO `layout_ordering_process` (`id`, `icon`, `title`, `description`, `cr
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_slide_header`
+-- Table structure for table `layout_slide_header`
 --
 
 CREATE TABLE `layout_slide_header` (
@@ -379,18 +405,18 @@ CREATE TABLE `layout_slide_header` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_slide_header`
+-- Dumping data for table `layout_slide_header`
 --
 
 INSERT INTO `layout_slide_header` (`id`, `image_url`, `title`, `description`) VALUES
-(2, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740415996/wwvzoukjrkdlskbdkmei.jpg', 'MINH THUẬN ', 'Chào mừng bạn đến với nhà hàng của chúng tôi !'),
-(3, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740416005/ds6ckdcq5kr0y7li04z6.jpg', 'Hải Sản Minh Thuận ', 'Chào mừng bạn đến với nhà hàng của chúng tôi !'),
-(10, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1740418715/whhrjpet9wfshn9hsrjo.jpg', 'MINH THUẬN', 'Chào mừng bạn đến với nhà hàng của chúng tôi !');
+(2, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669032/dph9ofthzvznzimuwy2v.jpg', 'MINH THUẬN ', 'Chào mừng bạn đến với nhà hàng của chúng tôi !'),
+(3, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669043/mug3rqyluk84nq1gqwa4.jpg', 'Hải Sản Minh Thuận ', 'Chào mừng bạn đến với nhà hàng của chúng tôi !'),
+(10, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741669403/jpvwpp9rl9rxnditeuq8.jpg', 'MINH THUẬN', 'Chào mừng bạn đến với nhà hàng của chúng tôi !');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_social_media_links`
+-- Table structure for table `layout_social_media_links`
 --
 
 CREATE TABLE `layout_social_media_links` (
@@ -403,7 +429,7 @@ CREATE TABLE `layout_social_media_links` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_social_media_links`
+-- Dumping data for table `layout_social_media_links`
 --
 
 INSERT INTO `layout_social_media_links` (`id`, `platform`, `url`, `target`, `created_at`, `updated_at`) VALUES
@@ -414,7 +440,7 @@ INSERT INTO `layout_social_media_links` (`id`, `platform`, `url`, `target`, `cre
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_space`
+-- Table structure for table `layout_space`
 --
 
 CREATE TABLE `layout_space` (
@@ -430,7 +456,7 @@ CREATE TABLE `layout_space` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_space`
+-- Dumping data for table `layout_space`
 --
 
 INSERT INTO `layout_space` (`id`, `icon`, `title`, `description_one`, `description_two`, `description_three`, `description_four`, `created_at`, `updated_at`) VALUES
@@ -440,7 +466,7 @@ INSERT INTO `layout_space` (`id`, `icon`, `title`, `description_one`, `descripti
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_story`
+-- Table structure for table `layout_story`
 --
 
 CREATE TABLE `layout_story` (
@@ -453,16 +479,16 @@ CREATE TABLE `layout_story` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_story`
+-- Dumping data for table `layout_story`
 --
 
 INSERT INTO `layout_story` (`id`, `title`, `description_one`, `description_two`, `created_at`, `updated_at`) VALUES
-(1, 'Câu Chuyện Của Chúng Tôi 1111s', 'Nhà hàng Hải Sản Minh Thuận được thành lập từ năm 2003, khởi đầu là một quán ăn nhỏ với tâm huyết mang đến những món hải sản tươi ngon nhất cho thực khách. Qua hơn 20 năm phát triển, chúng tôi đã trở thành một trong những nhà hàng hải sản uy tín nhất trong khu vực.', 'Với sự phát triển của công nghệ, chúng tôi đã mở rộng dịch vụ sang mảng đặt hàng trực tuyến và giao hàng tận nơi, giúp thực khách có thể thưởng thức các món ăn ngon của nhà hàng ngay tại nhà.', '2025-03-03 23:09:07', '2025-03-10 04:22:01');
+(1, 'Câu Chuyện Của Chúng Tôi', 'Nhà hàng Hải Sản Minh Thuận được thành lập từ năm 2003, khởi đầu là một quán ăn nhỏ với tâm huyết mang đến những món hải sản tươi ngon nhất cho thực khách. Qua hơn 20 năm phát triển, chúng tôi đã trở thành một trong những nhà hàng hải sản uy tín nhất trong khu vực.', 'Với sự phát triển của công nghệ, chúng tôi đã mở rộng dịch vụ sang mảng đặt hàng trực tuyến và giao hàng tận nơi, giúp thực khách có thể thưởng thức các món ăn ngon của nhà hàng ngay tại nhà.', '2025-03-03 23:09:07', '2025-03-12 06:00:55');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `layout_website_brand`
+-- Table structure for table `layout_website_brand`
 --
 
 CREATE TABLE `layout_website_brand` (
@@ -473,16 +499,16 @@ CREATE TABLE `layout_website_brand` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `layout_website_brand`
+-- Dumping data for table `layout_website_brand`
 --
 
 INSERT INTO `layout_website_brand` (`id`, `logo_url`, `brand_name`, `alt_text`) VALUES
-(1, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741577564/xp1gaumbsc7bwfoo4t9m.png', 'Cá Xanh ', 'hải sản');
+(1, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741760619/xqbnpja3oyl5hirtozfg.png', 'Cá Xanh ', 'hải sản');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `news`
+-- Table structure for table `news`
 --
 
 CREATE TABLE `news` (
@@ -496,7 +522,7 @@ CREATE TABLE `news` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `news`
+-- Dumping data for table `news`
 --
 
 INSERT INTO `news` (`id`, `title`, `description`, `image_url`, `status`, `created_at`, `updated_at`) VALUES
@@ -506,7 +532,7 @@ INSERT INTO `news` (`id`, `title`, `description`, `image_url`, `status`, `create
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `permission`
+-- Table structure for table `permission`
 --
 
 CREATE TABLE `permission` (
@@ -515,7 +541,7 @@ CREATE TABLE `permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `permission`
+-- Dumping data for table `permission`
 --
 
 INSERT INTO `permission` (`id`, `name`) VALUES
@@ -552,7 +578,7 @@ INSERT INTO `permission` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `products`
+-- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
@@ -571,41 +597,20 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `products`
+-- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity_sold`, `quantity`, `star`, `status`, `category`, `hot`, `created_at`, `updated_at`) VALUES
-(1, 'Ghẹ hấp xả', '<h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><p></p><p></p>', 22000000, 0, 100, 5, 0, 'shrimp', 0, '2025-03-07 00:21:57', '2025-03-07 02:47:06'),
-(2, 'thuan', '<h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><p></p><p></p>', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 00:22:41', '2025-03-07 03:46:18'),
-(3, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'shrimp', 0, '2025-03-07 00:22:41', '2025-03-07 02:47:13'),
-(4, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'shrimp', 0, '2025-03-07 00:22:43', '2025-03-07 02:47:11'),
-(5, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'shrimp', 0, '2025-03-07 00:22:46', '2025-03-07 02:47:09'),
-(6, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:08', '2025-03-07 03:20:08'),
-(7, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:10', '2025-03-07 03:20:10'),
-(8, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:12', '2025-03-07 03:20:12'),
-(9, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:15', '2025-03-07 03:20:15'),
-(10, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:17', '2025-03-07 03:20:17'),
-(11, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:19', '2025-03-07 03:20:19'),
-(12, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:21', '2025-03-07 03:20:21'),
-(13, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:23', '2025-03-07 03:20:23'),
-(14, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:25', '2025-03-07 03:20:25'),
-(15, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:27', '2025-03-07 03:20:27'),
-(16, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:28', '2025-03-07 03:20:28'),
-(17, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:29', '2025-03-07 03:20:29'),
-(18, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:31', '2025-03-07 03:20:31'),
-(19, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:31', '2025-03-07 03:20:31'),
-(20, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:32', '2025-03-07 03:20:32'),
-(21, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:37', '2025-03-07 03:20:37'),
-(22, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:37', '2025-03-07 03:20:37'),
-(23, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:39', '2025-03-07 03:20:39'),
-(24, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:39', '2025-03-07 03:20:39'),
-(25, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:41', '2025-03-07 03:20:41'),
-(26, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-07 03:20:41', '2025-03-07 03:20:41');
+(2, 'thuan', '<h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><h3><strong>Tôm rang me được ngợi là món ăn đơn giản, dễ ăn và dễ chế biến. Vị ngọt từ tôm kết hợp với vị chua của me chính ngọt ngon của me, thêm chút nước mắm vừa miệng.</strong></h3><h1><em>Nguyên liệu cần chuẩn bị để thực hiện món tôm rang me bao gồm:</em></h1><ol><li><p><em>Tôm sú đã làm sạch</em></p></li><li><p><em>Me tươi</em></p></li><li><p><em>Hành lá, rau ăn</em></p></li><li><p><em>Những thành phần khác như nước mắm, dầu ăn, đường...</em></p></li><li><p><em>Cách sơ chế nguyên liệu chế biến:</em></p></li><li><p><em>Tôm rửa sạch, đánh vảy và cắt râu</em></p></li><li><p><em>Ngâm tôm với nước muối, rửa sạch với nước, để ráo sau đó chế biến</em></p></li><li><p><em>Đồ gia vị</em></p></li><li><p><em>Cách làm tôm rang me như sau:</em></p></li></ol><blockquote><p><em>Bắt đầu, cho nướng chảo, sau đó cho 1 muỗng dầu ăn vào. Phi đầu tôm lên, cho 1 muỗng nước bột đầu để tạo màu sắc. Đầu tiên, bắt đầu rây khoảng 2 – 3 phút là có thể tắt bếp. Hỗn hợp đầu có màu đỏ, mùi thơm.</em></p><p></p><p><em>thuan1d</em></p></blockquote><p></p><p></p><p></p>', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-06 17:22:41', '2025-03-06 20:46:18'),
+(3, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'shrimp', 0, '2025-03-06 17:22:41', '2025-03-06 19:47:13'),
+(4, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'shrimp', 0, '2025-03-06 17:22:43', '2025-03-06 19:47:11'),
+(15, 'Ghẹ hấp xả', 'Ghẹ hấp xả là một món ăn được chế biến từ ghẹ, một loại hải sản phổ biến tại Việt Nam. Ghẹ được hấp với xả, tạo ra hương vị thơm ngon.', 22000000, 0, 100, 5, 0, 'fish', 0, '2025-03-06 20:20:27', '2025-03-06 20:20:27'),
+(28, 's', 'd', 2, 0, 2, 0, 0, 'shrimp', 1, '2025-03-12 06:32:27', '2025-03-12 06:33:07');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `product_images`
+-- Table structure for table `product_images`
 --
 
 CREATE TABLE `product_images` (
@@ -616,93 +621,31 @@ CREATE TABLE `product_images` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `product_images`
+-- Dumping data for table `product_images`
 --
 
 INSERT INTO `product_images` (`id`, `product_id`, `image_url`, `created_at`) VALUES
-(1, 2, 'https://picsum.photos/200', '2025-03-07 00:21:57'),
-(2, 2, 'https://picsum.photos/201', '2025-03-07 00:21:57'),
-(3, 2, 'https://picsum.photos/202', '2025-03-07 00:21:57'),
-(4, 2, 'https://picsum.photos/200', '2025-03-07 00:22:41'),
-(5, 2, 'https://picsum.photos/201', '2025-03-07 00:22:41'),
-(6, 2, 'https://picsum.photos/202', '2025-03-07 00:22:41'),
-(7, 2, 'https://picsum.photos/200', '2025-03-07 00:22:41'),
-(8, 3, 'https://picsum.photos/201', '2025-03-07 00:22:41'),
-(9, 3, 'https://picsum.photos/202', '2025-03-07 00:22:41'),
-(10, 4, 'https://picsum.photos/200', '2025-03-07 00:22:43'),
-(11, 4, 'https://picsum.photos/201', '2025-03-07 00:22:43'),
-(12, 4, 'https://picsum.photos/202', '2025-03-07 00:22:43'),
-(13, 5, 'https://picsum.photos/200', '2025-03-07 00:22:46'),
-(14, 5, 'https://picsum.photos/201', '2025-03-07 00:22:46'),
-(15, 5, 'https://picsum.photos/202', '2025-03-07 00:22:46'),
-(16, 6, 'https://picsum.photos/200', '2025-03-07 03:20:08'),
-(17, 6, 'https://picsum.photos/201', '2025-03-07 03:20:08'),
-(18, 6, 'https://picsum.photos/202', '2025-03-07 03:20:08'),
-(19, 7, 'https://picsum.photos/200', '2025-03-07 03:20:10'),
-(20, 7, 'https://picsum.photos/201', '2025-03-07 03:20:10'),
-(21, 7, 'https://picsum.photos/202', '2025-03-07 03:20:10'),
-(22, 8, 'https://picsum.photos/200', '2025-03-07 03:20:12'),
-(23, 8, 'https://picsum.photos/201', '2025-03-07 03:20:12'),
-(24, 8, 'https://picsum.photos/202', '2025-03-07 03:20:12'),
-(25, 9, 'https://picsum.photos/200', '2025-03-07 03:20:15'),
-(26, 9, 'https://picsum.photos/201', '2025-03-07 03:20:15'),
-(27, 9, 'https://picsum.photos/202', '2025-03-07 03:20:15'),
-(28, 10, 'https://picsum.photos/200', '2025-03-07 03:20:17'),
-(29, 10, 'https://picsum.photos/201', '2025-03-07 03:20:17'),
-(30, 10, 'https://picsum.photos/202', '2025-03-07 03:20:17'),
-(31, 11, 'https://picsum.photos/200', '2025-03-07 03:20:19'),
-(32, 11, 'https://picsum.photos/201', '2025-03-07 03:20:19'),
-(33, 11, 'https://picsum.photos/202', '2025-03-07 03:20:19'),
-(34, 12, 'https://picsum.photos/200', '2025-03-07 03:20:21'),
-(35, 12, 'https://picsum.photos/201', '2025-03-07 03:20:21'),
-(36, 12, 'https://picsum.photos/202', '2025-03-07 03:20:21'),
-(37, 13, 'https://picsum.photos/200', '2025-03-07 03:20:23'),
-(38, 13, 'https://picsum.photos/201', '2025-03-07 03:20:23'),
-(39, 13, 'https://picsum.photos/202', '2025-03-07 03:20:23'),
-(40, 14, 'https://picsum.photos/200', '2025-03-07 03:20:25'),
-(41, 14, 'https://picsum.photos/201', '2025-03-07 03:20:25'),
-(42, 14, 'https://picsum.photos/202', '2025-03-07 03:20:25'),
-(43, 15, 'https://picsum.photos/200', '2025-03-07 03:20:27'),
-(44, 15, 'https://picsum.photos/201', '2025-03-07 03:20:27'),
-(45, 15, 'https://picsum.photos/202', '2025-03-07 03:20:27'),
-(46, 16, 'https://picsum.photos/200', '2025-03-07 03:20:28'),
-(47, 16, 'https://picsum.photos/201', '2025-03-07 03:20:28'),
-(48, 16, 'https://picsum.photos/202', '2025-03-07 03:20:28'),
-(49, 17, 'https://picsum.photos/200', '2025-03-07 03:20:29'),
-(50, 17, 'https://picsum.photos/201', '2025-03-07 03:20:29'),
-(51, 17, 'https://picsum.photos/202', '2025-03-07 03:20:29'),
-(52, 18, 'https://picsum.photos/200', '2025-03-07 03:20:31'),
-(53, 18, 'https://picsum.photos/201', '2025-03-07 03:20:31'),
-(54, 18, 'https://picsum.photos/202', '2025-03-07 03:20:31'),
-(55, 19, 'https://picsum.photos/200', '2025-03-07 03:20:31'),
-(56, 19, 'https://picsum.photos/201', '2025-03-07 03:20:31'),
-(57, 19, 'https://picsum.photos/202', '2025-03-07 03:20:31'),
-(58, 20, 'https://picsum.photos/200', '2025-03-07 03:20:33'),
-(59, 20, 'https://picsum.photos/201', '2025-03-07 03:20:33'),
-(60, 20, 'https://picsum.photos/202', '2025-03-07 03:20:33'),
-(61, 21, 'https://picsum.photos/200', '2025-03-07 03:20:37'),
-(62, 21, 'https://picsum.photos/201', '2025-03-07 03:20:37'),
-(63, 21, 'https://picsum.photos/202', '2025-03-07 03:20:37'),
-(64, 22, 'https://picsum.photos/200', '2025-03-07 03:20:37'),
-(65, 22, 'https://picsum.photos/201', '2025-03-07 03:20:37'),
-(66, 22, 'https://picsum.photos/202', '2025-03-07 03:20:37'),
-(67, 23, 'https://picsum.photos/200', '2025-03-07 03:20:39'),
-(68, 23, 'https://picsum.photos/201', '2025-03-07 03:20:39'),
-(69, 23, 'https://picsum.photos/202', '2025-03-07 03:20:39'),
-(70, 24, 'https://picsum.photos/200', '2025-03-07 03:20:39'),
-(71, 24, 'https://picsum.photos/201', '2025-03-07 03:20:39'),
-(72, 24, 'https://picsum.photos/202', '2025-03-07 03:20:39'),
-(73, 25, 'https://picsum.photos/200', '2025-03-07 03:20:41'),
-(74, 25, 'https://picsum.photos/201', '2025-03-07 03:20:41'),
-(75, 25, 'https://picsum.photos/202', '2025-03-07 03:20:41'),
-(76, 26, 'https://picsum.photos/200', '2025-03-07 03:20:41'),
-(77, 26, 'https://picsum.photos/201', '2025-03-07 03:20:41'),
-(78, 26, 'https://picsum.photos/202', '2025-03-07 03:20:41');
+(1, 2, 'https://picsum.photos/200', '2025-03-06 17:21:57'),
+(2, 2, 'https://picsum.photos/201', '2025-03-06 17:21:57'),
+(3, 2, 'https://picsum.photos/202', '2025-03-06 17:21:57'),
+(4, 2, 'https://picsum.photos/200', '2025-03-06 17:22:41'),
+(5, 2, 'https://picsum.photos/201', '2025-03-06 17:22:41'),
+(6, 2, 'https://picsum.photos/202', '2025-03-06 17:22:41'),
+(7, 2, 'https://picsum.photos/200', '2025-03-06 17:22:41'),
+(8, 3, 'https://picsum.photos/201', '2025-03-06 17:22:41'),
+(9, 3, 'https://picsum.photos/202', '2025-03-06 17:22:41'),
+(10, 4, 'https://picsum.photos/200', '2025-03-06 17:22:43'),
+(11, 4, 'https://picsum.photos/201', '2025-03-06 17:22:43'),
+(12, 4, 'https://picsum.photos/202', '2025-03-06 17:22:43'),
+(43, 15, 'https://picsum.photos/200', '2025-03-06 20:20:27'),
+(44, 15, 'https://picsum.photos/201', '2025-03-06 20:20:27'),
+(45, 15, 'https://picsum.photos/202', '2025-03-06 20:20:27'),
+(81, 28, 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741761147/pxvxswszjbp0rsibmm98.jpg', '2025-03-12 06:32:27');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `role`
+-- Table structure for table `role`
 --
 
 CREATE TABLE `role` (
@@ -713,7 +656,7 @@ CREATE TABLE `role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `role`
+-- Dumping data for table `role`
 --
 
 INSERT INTO `role` (`id`, `name`, `created_at`, `updated_at`) VALUES
@@ -726,7 +669,7 @@ INSERT INTO `role` (`id`, `name`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `role_permission`
+-- Table structure for table `role_permission`
 --
 
 CREATE TABLE `role_permission` (
@@ -735,7 +678,7 @@ CREATE TABLE `role_permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `role_permission`
+-- Dumping data for table `role_permission`
 --
 
 INSERT INTO `role_permission` (`role_id`, `permission_id`) VALUES
@@ -778,7 +721,7 @@ INSERT INTO `role_permission` (`role_id`, `permission_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -794,110 +737,117 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `fullName`, `email`, `avatar`, `password`, `role_id`, `status`, `created_at`, `updated_at`) VALUES
 (3, 'Nguyễn Minh Thuận', 'thuan18092003@gmail.com', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg', '$2y$10$StIjaXQgqcfafCqVwM2.G.OtuIdX605W93NpBDuUYVrIHaj.6TUGC', 3, 0, '2025-03-09 16:10:52', '2025-03-09 16:15:51'),
-(16, 'admin1', 'admin@gmail.com', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg', '$2y$10$OCZQbh7fL0gQuJ9C.5.tEuCudPUpZxoDEw2AFfU4HI7oldv34BDf6', 29, 0, '2025-03-09 22:50:47', '2025-03-09 22:51:29');
+(16, 'admin1', 'admin@gmail.com', 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg', '$2y$10$OCZQbh7fL0gQuJ9C.5.tEuCudPUpZxoDEw2AFfU4HI7oldv34BDf6', 29, 0, '2025-03-09 22:50:47', '2025-03-11 04:49:10');
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `blacklisted_tokens`
+-- Indexes for table `blacklisted_tokens`
 --
 ALTER TABLE `blacklisted_tokens`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `contacts`
+-- Indexes for table `contacts`
 --
 ALTER TABLE `contacts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_benefit`
+-- Indexes for table `layout_benefit`
 --
 ALTER TABLE `layout_benefit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_contactsfooter`
+-- Indexes for table `layout_contactsfooter`
 --
 ALTER TABLE `layout_contactsfooter`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_customer_choose_item_section`
+-- Indexes for table `layout_customer_choose_item_section`
 --
 ALTER TABLE `layout_customer_choose_item_section`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_customer_section`
+-- Indexes for table `layout_customer_section`
 --
 ALTER TABLE `layout_customer_section`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_navigation_menu`
+-- Indexes for table `layout_navigation_menu`
 --
 ALTER TABLE `layout_navigation_menu`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_ordering_process`
+-- Indexes for table `layout_ordering_process`
 --
 ALTER TABLE `layout_ordering_process`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_slide_header`
+-- Indexes for table `layout_slide_header`
 --
 ALTER TABLE `layout_slide_header`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_social_media_links`
+-- Indexes for table `layout_social_media_links`
 --
 ALTER TABLE `layout_social_media_links`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `layout_Website_Brand`
---
-ALTER TABLE `layout_Website_Brand`
-  ADD PRIMARY KEY (`id`);
-
---
--- Chỉ mục cho bảng `news`
+-- Indexes for table `news`
 --
 ALTER TABLE `news`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `permission`
+-- Indexes for table `permission`
 --
 ALTER TABLE `permission`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `role`
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_images`
+--
+ALTER TABLE `product_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `role`
 --
 ALTER TABLE `role`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `role_permission`
+-- Indexes for table `role_permission`
 --
 ALTER TABLE `role_permission`
   ADD PRIMARY KEY (`role_id`,`permission_id`),
   ADD KEY `fk_role_permission_permission` (`permission_id`);
 
 --
--- Chỉ mục cho bảng `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
@@ -905,112 +855,124 @@ ALTER TABLE `user`
   ADD KEY `fk_user_role` (`role_id`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `blacklisted_tokens`
+-- AUTO_INCREMENT for table `blacklisted_tokens`
 --
 ALTER TABLE `blacklisted_tokens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT cho bảng `contacts`
+-- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT cho bảng `layout_benefit`
+-- AUTO_INCREMENT for table `layout_benefit`
 --
 ALTER TABLE `layout_benefit`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT cho bảng `layout_contactsfooter`
+-- AUTO_INCREMENT for table `layout_contactsfooter`
 --
 ALTER TABLE `layout_contactsfooter`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT cho bảng `layout_customer_choose_item_section`
+-- AUTO_INCREMENT for table `layout_customer_choose_item_section`
 --
 ALTER TABLE `layout_customer_choose_item_section`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT cho bảng `layout_customer_section`
+-- AUTO_INCREMENT for table `layout_customer_section`
 --
 ALTER TABLE `layout_customer_section`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT cho bảng `layout_navigation_menu`
+-- AUTO_INCREMENT for table `layout_navigation_menu`
 --
 ALTER TABLE `layout_navigation_menu`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT cho bảng `layout_ordering_process`
+-- AUTO_INCREMENT for table `layout_ordering_process`
 --
 ALTER TABLE `layout_ordering_process`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT cho bảng `layout_slide_header`
+-- AUTO_INCREMENT for table `layout_slide_header`
 --
 ALTER TABLE `layout_slide_header`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT cho bảng `layout_social_media_links`
+-- AUTO_INCREMENT for table `layout_social_media_links`
 --
 ALTER TABLE `layout_social_media_links`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT cho bảng `layout_Website_Brand`
---
-ALTER TABLE `layout_Website_Brand`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT cho bảng `news`
+-- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
--- AUTO_INCREMENT cho bảng `permission`
+-- AUTO_INCREMENT for table `permission`
 --
 ALTER TABLE `permission`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
--- AUTO_INCREMENT cho bảng `role`
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `product_images`
+--
+ALTER TABLE `product_images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+
+--
+-- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
--- AUTO_INCREMENT cho bảng `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- Các ràng buộc cho các bảng đã đổ
+-- Constraints for dumped tables
 --
 
 --
--- Các ràng buộc cho bảng `role_permission`
+-- Constraints for table `product_images`
+--
+ALTER TABLE `product_images`
+  ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `role_permission`
 --
 ALTER TABLE `role_permission`
   ADD CONSTRAINT `fk_role_permission_permission` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_role_permission_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Các ràng buộc cho bảng `user`
+-- Constraints for table `user`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
