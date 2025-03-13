@@ -27,7 +27,7 @@ if (!empty($data->fullName) && !empty($data->email) && !empty($data->roleId) && 
     $email = $data->email;
     $avatar = $data->avatar ?? 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg';
     $roleId = $data->roleId;
-    $status = isset($data->status) ? (bool)$data->status : false; // Mặc định là false
+    $status = false; // Mặc định là false nếu không có trường status
     $password = password_hash($data->password, PASSWORD_DEFAULT);
 
     // Kiểm tra xem email đã tồn tại chưa
