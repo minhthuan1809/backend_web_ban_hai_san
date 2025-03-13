@@ -22,10 +22,12 @@ try {
 
     $roles = [];
     while ($row = $result->fetch_assoc()) {
-        $roles[] = [
-            'id' => $row['id'],
-            'name' => $row['name']
-        ];
+        if ($row['id'] != 3) {
+            $roles[] = [
+                'id' => $row['id'],
+                'name' => $row['name']
+            ];
+        }
     }
 
     echo json_encode([

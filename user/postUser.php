@@ -23,6 +23,17 @@ if (!empty($data->fullName) && !empty($data->email) && !empty($data->roleId) && 
         exit;
     }
 
+    // Kiểm tra roleId = 3
+    if ($data->roleId == 3) {
+        http_response_code(400);
+        echo json_encode([
+            "ok" => false,
+            "status" => false,
+            "message" => "Không thể cấp quyền này cho người dùng"
+        ]);
+        exit;
+    }
+
     $fullName = $data->fullName;
     $email = $data->email;
     $avatar = $data->avatar ?? 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg';
