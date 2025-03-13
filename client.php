@@ -100,7 +100,10 @@ else if (preg_match('/\/ads/', $request_uri)) {
     include __DIR__ . '/adshomepage/indexAds.php';
 }
 
-
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/forgotpass
+else if (preg_match('/\/forgotpass/', $request_uri)) {
+    include __DIR__ . '/api/forgotPass.php';
+}
 
 else {
     echo json_encode([

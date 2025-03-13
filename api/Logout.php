@@ -13,6 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
+// Tạo bảng blacklisted_tokens nếu chưa tồn tại
+$createTable = "CREATE TABLE IF NOT EXISTS blacklisted_tokens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    token TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+$conn->query($createTable);
+
 // Lấy token từ header Authorization
 $headers = apache_request_headers();
 $token = null;
