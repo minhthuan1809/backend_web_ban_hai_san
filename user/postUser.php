@@ -27,7 +27,7 @@ if (!empty($data->fullName) && !empty($data->email) && !empty($data->roleId) && 
     $email = $data->email;
     $avatar = $data->avatar ?? 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg';
     $roleId = $data->roleId;
-    $status = false; // Mặc định là false nếu không có trường status
+    $status = 0; // Thay đổi từ false thành 0 vì cột status trong DB yêu cầu kiểu integer
     $password = password_hash($data->password, PASSWORD_DEFAULT);
 
     // Kiểm tra xem email đã tồn tại chưa
@@ -53,7 +53,7 @@ if (!empty($data->fullName) && !empty($data->email) && !empty($data->roleId) && 
             throw new Exception("Lỗi chuẩn bị câu lệnh SQL: " . $db->error);
         }
 
-        $stmt->bind_param("sssiss", $fullName, $email, $avatar, $roleId, $status, $password);
+        $stmt->bind_param("sssiii", $fullName, $email, $avatar, $roleId, $status, $password); // Thay đổi "sssiss" thành "sssiii" vì status là integer
 
         if($stmt->execute()) {
             http_response_code(201);
