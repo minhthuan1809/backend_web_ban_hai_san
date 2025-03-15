@@ -36,7 +36,7 @@ if (!empty($data->fullName) && !empty($data->email) && !empty($data->roleId) && 
 
     $fullName = $data->fullName;
     $email = $data->email;
-    $avatar = $data->avatar ?? 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741501590/vjnmoh9gpo4mgdzabi5x.jpg';
+    $avatar = $data->avatar ?? 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1742015676/c8rpqw6wk8edghzxo4xg.jpg';
     $roleId = $data->roleId;
     $status = 0; // Thay đổi từ false thành 0 vì cột status trong DB yêu cầu kiểu integer
     $password = password_hash($data->password, PASSWORD_DEFAULT);

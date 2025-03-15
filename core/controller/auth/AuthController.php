@@ -107,7 +107,7 @@ class AuthController {
             // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $role_id = 2;
-            $avatar = 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1741809317/whwfvrte2bozdtxbeg0m.jpg';
+            $avatar = 'https://res.cloudinary.com/dsoj3y7wu/image/upload/v1742015676/c8rpqw6wk8edghzxo4xg.jpg';
             
             // Insert new user
             $stmt = $this->db->prepare("INSERT INTO user (email, password, fullName, role_id, avatar) VALUES (?, ?, ?, ?, ?)");
