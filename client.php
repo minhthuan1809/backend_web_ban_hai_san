@@ -105,6 +105,19 @@ else if (preg_match('/\/forgotpass/', $request_uri)) {
     include __DIR__ . '/api/forgotPass.php';
 }
 
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/address
+else if (preg_match('/\/address/', $request_uri)) {
+    include __DIR__ . '/address/indexAddress.php';
+}
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/change_password
+else if (preg_match('/\/change_password/', $request_uri)) {
+    include __DIR__ . '/api/ChangePassword.php';
+}
+
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/change_infor_user
+else if (preg_match('/\/change_infor_user/', $request_uri)) {
+    include __DIR__ . '/api/ChangeInforUser.php';
+}
 else {
     echo json_encode([
         'ok' => false,

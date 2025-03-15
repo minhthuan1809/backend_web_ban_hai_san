@@ -55,6 +55,21 @@ try {
 
     $users = [];
     while ($row = $result->fetch_assoc()) {
+        // Lấy địa chỉ của người dùng
+        $address_sql = "SELECT id, address, phone FROM address WHERE user_id = " . $row['id'];
+        $address_result = $conn->query($address_sql);
+        
+        $addresses = [];
+        if ($address_result && $address_result->num_rows > 0) {
+            while ($address_row = $address_result->fetch_assoc()) {
+                $addresses[] = [
+                    "id" => $address_row['id'],
+                    "address" => $address_row['address'],
+                    "phone" => $address_row['phone']
+                ];
+            }
+        }
+        
         $users[] = [
             "id" => $row['id'],
             "fullName" => $row['fullName'], 
@@ -64,8 +79,12 @@ try {
             "level" => $row['role_name'],
             "status" => $row['status'] == 1 ? true : false,
             "created_at" => $row['created_at'],
-            "updated_at" => $row['updated_at']
+            "updated_at" => $row['updated_at'],
+            "address" => $addresses
         ];
+        if (isset($address_result)) {
+            $address_result->close();
+        }
     }
 
     echo json_encode([

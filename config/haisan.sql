@@ -719,7 +719,20 @@ INSERT INTO `role_permission` (`role_id`, `permission_id`) VALUES
 (29, 11);
 
 -- --------------------------------------------------------
+CREATE TABLE `address` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_id` INT(11) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `address` VARCHAR(255) NOT NULL,
+  `phone` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+INSERT INTO `address` (`user_id`, `name`, `address`, `phone`, `created_at`, `updated_at`) VALUES
+(32, 'home', '123 Main St, City, Country', '1234567890', '2025-03-14 10:00:00', '2025-03-14 10:00:00');
 --
 -- Table structure for table `user`
 --

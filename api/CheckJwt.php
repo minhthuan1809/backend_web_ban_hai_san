@@ -38,9 +38,25 @@ if ($token) {
                 $avatar = $row['avatar'];
                 $level = $row['role_id'];
                 
+                // Lấy thông tin địa chỉ của người dùng
+                $address_sql = "SELECT id, address, phone FROM address WHERE user_id = ?";
+                $address_stmt = $db->prepare($address_sql);
+                $address_stmt->bind_param("i", $userId);
+                $address_stmt->execute();
+                $address_result = $address_stmt->get_result();
+                
+                $addresses = [];
+                if ($address_result && $address_result->num_rows > 0) {
+                    while ($address_row = $address_result->fetch_assoc()) {
+                        $addresses[] = [
+                            "id" => $address_row['id'],
+                            "address" => $address_row['address'],
+                            "phone" => $address_row['phone']
+                        ];
+                    }
+                }
 
-
-                    http_response_code(200);
+                http_response_code(200);
                 echo json_encode(array(
                     "ok" => true,
                     "status" => true,
@@ -49,10 +65,14 @@ if ($token) {
                         "email" => $email,
                         "name" => $fullName,
                         "avatar" => $avatar,
-                        "level" => $level
+                        "level" => $level,
+                        "addresses" => $addresses
                     ]
                 ));
                 
+                if (isset($address_stmt)) {
+                    $address_stmt->close();
+                }
                 
             } else {
                 http_response_code(401);
