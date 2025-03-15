@@ -123,6 +123,15 @@ else if (preg_match('/\/change_infor_user/', $request_uri)) {
 else if (preg_match('/\/card/', $request_uri)) {
     include __DIR__ . '/card/indexCard.php';
 }
+
+// [GET] [POST] [PUT] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/discount
+else if (preg_match('/\/discount/', $request_uri)) {
+    include __DIR__ . '/discount/indexDiscount.php';
+}
+//  [GET] [POST] [PUT] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/order
+else if (preg_match('/\/order/', $request_uri)) {
+    include __DIR__ . '/orders/indexOrder.php';
+}
 else {
     echo json_encode([
         'ok' => false,

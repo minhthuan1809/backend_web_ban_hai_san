@@ -56,7 +56,7 @@ try {
     $users = [];
     while ($row = $result->fetch_assoc()) {
         // Lấy địa chỉ của người dùng
-        $address_sql = "SELECT id, address, phone FROM address WHERE user_id = " . $row['id'];
+        $address_sql = "SELECT id, name, address, phone FROM address WHERE user_id = " . $row['id'];
         $address_result = $conn->query($address_sql);
         
         $addresses = [];
@@ -64,6 +64,7 @@ try {
             while ($address_row = $address_result->fetch_assoc()) {
                 $addresses[] = [
                     "id" => $address_row['id'],
+                    "name" => $address_row['name'],
                     "address" => $address_row['address'],
                     "phone" => $address_row['phone']
                 ];
@@ -80,7 +81,7 @@ try {
             "status" => $row['status'] == 1 ? true : false,
             "created_at" => $row['created_at'],
             "updated_at" => $row['updated_at'],
-            "address" => $addresses
+            "addresses" => $addresses
         ];
         if (isset($address_result)) {
             $address_result->close();

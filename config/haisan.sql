@@ -573,7 +573,15 @@ INSERT INTO `permission` (`id`, `name`) VALUES
 (27, 'delete_role'),
 (28, 'get_role'),
 (29, 'get_contacts'),
-(30, 'delete_contacts');
+(30, 'delete_contacts'),
+(31, 'get_discount'),
+(32, 'post_discount'),
+(33, 'put_discount'),
+(34, 'delete_discount'),
+(35, 'get_order'),
+(36, 'post_order'),
+(37, 'put_order'),
+(38, 'delete_order');
 
 -- --------------------------------------------------------
 
@@ -616,7 +624,7 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `quantity_sold`, `
 CREATE TABLE `product_images` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `image_url` varchar(255) NOT NULL DEFAULT 'https://picsum.photos/200',
+  `image_url` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -719,7 +727,45 @@ INSERT INTO `role_permission` (`role_id`, `permission_id`) VALUES
 (29, 11);
 
 
--- giỏ hàng
+
+CREATE TABLE `discount` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `discount_percent` int(11) NOT NULL,
+  `start_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `quantity` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `end_time` timestamp NOT NULL DEFAULT '2038-01-01 00:00:00',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    name VARCHAR(255),
+    phone VARCHAR(20),
+    address TEXT,
+    data_product JSON,  -- Lưu danh sách sản phẩm dưới dạng JSON
+    discount_code VARCHAR(50),
+    discount_percent INT,
+    final_total INT,  
+    free_of_charge INT,  
+    payment_method ENUM('cod', 'online'),
+    note TEXT,
+    status ENUM('pending', 'processing', 'completed', 'canceled') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+INSERT INTO orders (user_id, name, phone, address, data_product, discount_code, discount_percent, final_total, free_of_charge, payment_method, status)
+VALUES (17, 'home', '0325397255', 'nhà 40 hà nội', JSON_ARRAY(37, 36), 'QMCVYVGM', 20, 265200, 30000, 'cod', 'pending');
+
+
 CREATE TABLE `cart` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,

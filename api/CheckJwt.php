@@ -39,7 +39,7 @@ if ($token) {
                 $level = $row['role_id'];
                 
                 // Lấy thông tin địa chỉ của người dùng
-                $address_sql = "SELECT id, address, phone FROM address WHERE user_id = ?";
+                $address_sql = "SELECT id, name, address, phone FROM address WHERE user_id = ?";
                 $address_stmt = $db->prepare($address_sql);
                 $address_stmt->bind_param("i", $userId);
                 $address_stmt->execute();
@@ -51,7 +51,8 @@ if ($token) {
                         $addresses[] = [
                             "id" => $address_row['id'],
                             "address" => $address_row['address'],
-                            "phone" => $address_row['phone']
+                            "phone" => $address_row['phone'],
+                            "name" => $address_row['name']
                         ];
                     }
                 }
@@ -61,7 +62,7 @@ if ($token) {
                     "ok" => true,
                     "status" => true,
                     "data" => [
-                        // "id" => $userId,
+                        "id" => $userId,
                         "email" => $email,
                         "name" => $fullName,
                         "avatar" => $avatar,
