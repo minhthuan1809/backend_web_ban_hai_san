@@ -16,7 +16,11 @@ try {
             include __DIR__ . '/postCard.php';
             break;
         case 'DELETE':
-            include __DIR__ . '/deleteCard.php';    
+            if (preg_match('/\/card\/minus\/\d+$/', $request_uri)) {
+                include __DIR__ . '/MinusQuantity.php';
+            } else {
+                include __DIR__ . '/deleteCard.php';    
+            }
             break;
         default:
             echo json_encode([
