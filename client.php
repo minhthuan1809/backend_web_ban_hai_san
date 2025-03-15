@@ -118,6 +118,11 @@ else if (preg_match('/\/change_password/', $request_uri)) {
 else if (preg_match('/\/change_infor_user/', $request_uri)) {
     include __DIR__ . '/api/ChangeInforUser.php';
 }
+
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/card
+else if (preg_match('/\/card/', $request_uri)) {
+    include __DIR__ . '/card/indexCard.php';
+}
 else {
     echo json_encode([
         'ok' => false,
