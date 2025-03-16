@@ -31,12 +31,140 @@ try {
     $updateFields = [];
     $params = [];
     $types = "";
-    
+
     // Kiểm tra và thêm các trường cần cập nhật
     if (isset($data['status'])) {
         $updateFields[] = "status = ?";
         $params[] = $data['status'];
         $types .= "s";
+
+        // Nếu status là canceled thì lưu vào history_orders và xóa khỏi orders
+        if ($data['status'] === 'canceled') {
+            // Lấy thông tin đơn hàng hiện tại
+            $getOrderSql = "SELECT user_id, name, phone, address, data_product, discount_code, discount_percent, final_total, free_of_charge, payment_method, note FROM orders WHERE id = ?";
+            $stmt = $conn->prepare($getOrderSql);
+            $stmt->bind_param("i", $orderId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $orderData = $result->fetch_assoc();
+
+            if ($orderData) {
+                // Thêm vào bảng history_orders
+                $insertHistorySql = "INSERT INTO history_orders (user_id, name, phone, address, data_product, discount_code, discount_percent, final_total, free_of_charge, payment_method, note, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'canceled')";
+                $stmtHistory = $conn->prepare($insertHistorySql);
+                $stmtHistory->bind_param("isssssiiiss", 
+                    $orderData['user_id'],
+                    $orderData['name'],
+                    $orderData['phone'],
+                    $orderData['address'],
+                    $orderData['data_product'],
+                    $orderData['discount_code'],
+                    $orderData['discount_percent'],
+                    $orderData['final_total'],
+                    $orderData['free_of_charge'],
+                    $orderData['payment_method'],
+                    $orderData['note']
+                );
+                if($stmtHistory->execute()) {
+                    $history_order_id = $stmtHistory->insert_id;
+
+                    // Xóa đơn hàng khỏi bảng orders
+                    $deleteOrderSql = "DELETE FROM orders WHERE id = ?";
+                    $stmtDelete = $conn->prepare($deleteOrderSql);
+                    $stmtDelete->bind_param("i", $orderId);
+                    $stmtDelete->execute();
+
+                    echo json_encode([
+                        "ok" => true,
+                        "success" => true,
+                        "message" => "Đã hủy đơn hàng thành công",
+                        "history_order_id" => $history_order_id
+                    ]);
+                    exit;
+                }
+            }
+        }
+
+        // Nếu status là completed thì lưu vào history_orders và cập nhật số lượng sản phẩm
+        if ($data['status'] === 'completed') {
+            // Lấy thông tin đơn hàng hiện tại
+            $getOrderSql = "SELECT user_id, name, phone, address, data_product, discount_code, discount_percent, final_total, free_of_charge, payment_method, note FROM orders WHERE id = ?";
+            $stmt = $conn->prepare($getOrderSql);
+            $stmt->bind_param("i", $orderId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $orderData = $result->fetch_assoc();
+
+            if ($orderData) {
+                // Thêm vào bảng history_orders
+                $insertHistorySql = "INSERT INTO history_orders (user_id, name, phone, address, data_product, discount_code, discount_percent, final_total, free_of_charge, payment_method, note, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'completed')";
+                $stmtHistory = $conn->prepare($insertHistorySql);
+                $stmtHistory->bind_param("isssssiiiss", 
+                    $orderData['user_id'],
+                    $orderData['name'],
+                    $orderData['phone'],
+                    $orderData['address'],
+                    $orderData['data_product'],
+                    $orderData['discount_code'],
+                    $orderData['discount_percent'],
+                    $orderData['final_total'],
+                    $orderData['free_of_charge'],
+                    $orderData['payment_method'],
+                    $orderData['note']
+                );
+                if($stmtHistory->execute()) {
+                    $history_order_id = $stmtHistory->insert_id;
+
+                    // Cập nhật số lượng sản phẩm
+                    $products = json_decode($orderData['data_product'], true);
+                    foreach ($products as $product) {
+                        $updateProductSql = "UPDATE products SET quantity = quantity - ?, quantity_sold = quantity_sold + ? WHERE id = ?";
+                        $stmtProduct = $conn->prepare($updateProductSql);
+                        $stmtProduct->bind_param("iii", $product['quantity'], $product['quantity'], $product['product_id']);
+                        $stmtProduct->execute();
+                    }
+
+                    // Giảm số lượng mã giảm giá và thêm vào discount_history
+                    if(!empty($orderData['discount_code'])) {
+                        // Cập nhật số lượng mã giảm giá
+                        $updateDiscountSql = "UPDATE discount SET quantity = quantity - 1 WHERE code = ? AND quantity > 0";
+                        $stmtDiscount = $conn->prepare($updateDiscountSql);
+                        $stmtDiscount->bind_param("s", $orderData['discount_code']);
+                        $stmtDiscount->execute();
+
+                        // Lấy discount_id
+                        $getDiscountIdSql = "SELECT id FROM discount WHERE code = ?";
+                        $stmtDiscountId = $conn->prepare($getDiscountIdSql);
+                        $stmtDiscountId->bind_param("s", $orderData['discount_code']);
+                        $stmtDiscountId->execute();
+                        $discountResult = $stmtDiscountId->get_result();
+                        $discountData = $discountResult->fetch_assoc();
+
+                        if($discountData) {
+                            // Thêm vào discount_history
+                            $insertDiscountHistorySql = "INSERT INTO discount_history (discount_id, order_history_id) VALUES (?, ?)";
+                            $stmtDiscountHistory = $conn->prepare($insertDiscountHistorySql);
+                            $stmtDiscountHistory->bind_param("ii", $discountData['id'], $history_order_id);
+                            $stmtDiscountHistory->execute();
+                        }
+                    }
+
+                    // Xóa đơn hàng khỏi bảng orders
+                    $deleteOrderSql = "DELETE FROM orders WHERE id = ?";
+                    $stmtDelete = $conn->prepare($deleteOrderSql);
+                    $stmtDelete->bind_param("i", $orderId);
+                    $stmtDelete->execute();
+
+                    echo json_encode([
+                        "ok" => true,
+                        "success" => true,
+                        "message" => "Đã hoàn thành đơn hàng thành công",
+                        "history_order_id" => $history_order_id
+                    ]);
+                    exit;
+                }
+            }
+        }
     }
     
     if (isset($data['address'])) {

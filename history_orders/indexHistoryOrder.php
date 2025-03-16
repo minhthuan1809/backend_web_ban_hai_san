@@ -1,5 +1,5 @@
 <?php
-// [GET] [PUT] [POST] [DELETE] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/order
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/history_order
 require_once __DIR__ . '/../core/middleware/PermissionMiddleware.php';
 require_once __DIR__ . '/../config/TokenUtils.php';
 
@@ -15,28 +15,17 @@ try {
             try {
                 $userId = TokenUtils::validateTokenAndGetUserId();
                 $permissionMiddleware->authorize($userId, 'get_order');
-                include __DIR__ . '/getOrder.php';
+                include __DIR__ . '/getHistoryOrder.php';
             } catch (Exception $e) {
                 http_response_code(404);
                 echo json_encode([
                     "ok" => false,
                     "success" => false,
-                    "message" => "Không có đơn hàng nào"
+                    "message" => "Không có lịch sử đơn hàng nào"
                 ]);
             }
             break;
 
-        case 'PUT':
-           
-            $userId = TokenUtils::validateTokenAndGetUserId();
-            $permissionMiddleware->authorize($userId, 'put_order');
-            include __DIR__ . '/putOrder.php';
-            break;
-   
-        case 'POST':
-          
-            include __DIR__ . '/postOrder.php';
-            break;
 
         default:
             echo json_encode([

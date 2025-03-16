@@ -742,6 +742,38 @@ CREATE TABLE `discount` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Cập nhật bảng discount_history với liên kết đến history_orders
+CREATE TABLE `discount_history` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `discount_id` INT(11) NOT NULL,
+  `order_history_id` INT(11) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`order_history_id`) REFERENCES `history_orders`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- lưu lại lịch sử đơn hàng
+CREATE TABLE history_orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    name VARCHAR(255),
+    phone VARCHAR(20),
+    address TEXT,
+    data_product JSON,  -- Lưu danh sách sản phẩm dưới dạng JSON
+    discount_code VARCHAR(50),
+    discount_percent INT,
+    final_total INT,  
+    free_of_charge INT,  
+    payment_method ENUM('cod', 'bank'),
+    note TEXT,
+    status ENUM( 'completed', 'canceled') DEFAULT 'completed',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,

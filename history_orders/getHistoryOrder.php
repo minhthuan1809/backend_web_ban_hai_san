@@ -2,33 +2,44 @@
 require_once __DIR__ . '/../config/db.php';
 
 try {
-    // Lấy tham số từ request
+    // Lấy tham số tìm kiếm từ request
     $search = isset($_GET['search']) ? $_GET['search'] : '';
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
     $offset = ($page - 1) * $limit;
 
-    // Xây dựng câu truy vấn cơ sở
-    $sql = "SELECT o.*, u.fullName as user_fullName, u.email as user_email, u.avatar as user_avatar 
-            FROM orders o
-            LEFT JOIN user u ON o.user_id = u.id";
+    // Xây dựng câu query với điều kiện tìm kiếm
+    $sql = "SELECT ho.*, u.fullName as user_fullName, u.email as user_email, u.avatar as user_avatar,
+            COUNT(*) OVER() as total_records 
+            FROM history_orders ho
+            LEFT JOIN user u ON ho.user_id = u.id 
+            WHERE 1=1";
 
-    // Thêm điều kiện tìm kiếm nếu có
+    $params = array();
+    $types = "";
+
     if (!empty($search)) {
         $search = "%$search%";
-        $sql .= " WHERE o.id LIKE ? OR o.phone LIKE ? OR u.email LIKE ?";
+        $sql .= " AND (ho.id LIKE ? OR ho.phone LIKE ? OR ho.name LIKE ? OR u.fullName LIKE ? OR u.email LIKE ?)";
+        $types .= "sssss";
+        $params[] = $search;
+        $params[] = $search;
+        $params[] = $search;
+        $params[] = $search;
+        $params[] = $search;
     }
 
-    // Thêm sắp xếp và phân trang
-    $sql .= " ORDER BY o.created_at DESC LIMIT ? OFFSET ?";
+    $sql .= " ORDER BY ho.created_at DESC LIMIT ? OFFSET ?";
+    $types .= "ii";
+    $params[] = $limit;
+    $params[] = $offset;
 
-    // Chuẩn bị và thực thi truy vấn
     $stmt = $conn->prepare($sql);
-    if (!empty($search)) {
-        $stmt->bind_param("sssii", $search, $search, $search, $limit, $offset);
-    } else {
-        $stmt->bind_param("ii", $limit, $offset);
+
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
     }
+
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -36,24 +47,11 @@ try {
         throw new Exception("Lỗi truy vấn: " . $conn->error);
     }
 
-    // Đếm tổng số đơn hàng
-    $count_sql = "SELECT COUNT(*) as total FROM orders o LEFT JOIN user u ON o.user_id = u.id";
-    if (!empty($search)) {
-        $count_sql .= " WHERE o.id LIKE ? OR o.phone LIKE ? OR u.email LIKE ?";
-        $count_stmt = $conn->prepare($count_sql);
-        $count_stmt->bind_param("sss", $search, $search, $search);
-    } else {
-        $count_stmt = $conn->prepare($count_sql);
-    }
-    $count_stmt->execute();
-    $total_result = $count_stmt->get_result();
-    $total_row = $total_result->fetch_assoc();
-    $total = $total_row['total'];
-    $total_pages = ceil($total / $limit);
-
+    $total_records = 0;
     if ($result->num_rows > 0) {
-        $orders = array();
+        $history_orders = array();
         while ($row = $result->fetch_assoc()) {
+            $total_records = $row['total_records'];
             // Chuyển đổi chuỗi data_product thành mảng
             $products = json_decode($row['data_product'], true);
             
@@ -91,12 +89,12 @@ try {
             }
 
             // Tạo mảng thông tin đơn hàng
-            $order = array(
+            $history_order = array(
                 'id' => $row['id'],
-                'user_id' => $row['user_id'],
+                'user_id' => $row['user_id'], 
                 'user' => array(
                     'fullName' => $row['user_fullName'],
-                    'email' => $row['user_email'], 
+                    'email' => $row['user_email'],
                     'avatar' => $row['user_avatar']
                 ),
                 'name' => $row['name'],
@@ -111,39 +109,34 @@ try {
                 'status' => $row['status'],
                 'products' => $product_list,
                 'created_at' => $row['created_at'],
-                'updated_at' => $row['updated_at'],
+                'updated_at' => $row['updated_at']
             );
 
-            $orders[] = $order;
+            $history_orders[] = $history_order;
         }
 
         echo json_encode([
             'ok' => true,
             'success' => true,
-            'message' => 'Lấy danh sách đơn hàng thành công',
-            'data' => [
-                'orders' => $orders,
-                'pagination' => [
-                    'page' => $page,
-                    'limit' => $limit,
-                    'total' => $total,
-                    'total_pages' => $total_pages
-                ]
+            'message' => 'Lấy danh sách lịch sử đơn hàng thành công',
+            'data' => $history_orders,
+            'pagination' => [
+                'page' => $page,
+                'limit' => $limit,
+                'total_records' => (int)$total_records,
+                'total_pages' => ceil($total_records / $limit)
             ]
         ]);
     } else {
         echo json_encode([
             'ok' => false,
             'success' => false,
-            'message' => 'Không có đơn hàng nào',
-            'data' => [
-                'orders' => [],
-                'pagination' => [
-                    'page' => $page,
-                    'limit' => $limit,
-                    'total' => 0,
-                    'total_pages' => 0
-                ]
+            'message' => 'Không có lịch sử đơn hàng nào',
+            'pagination' => [
+                'page' => $page,
+                'limit' => $limit,
+                'total_records' => 0,
+                'total_pages' => 0
             ]
         ]);
     }

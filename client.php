@@ -132,6 +132,14 @@ else if (preg_match('/\/discount/', $request_uri)) {
 else if (preg_match('/\/order/', $request_uri)) {
     include __DIR__ . '/orders/indexOrder.php';
 }
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/history_order
+else if (preg_match('/\/history_order/', $request_uri)) {
+    include __DIR__ . '/history_orders/indexHistoryOrder.php';
+}
+
+else if (preg_match('/\/sepay/', $request_uri)) {
+    include __DIR__ . '/api/sepay.php';
+}
 else {
     echo json_encode([
         'ok' => false,
