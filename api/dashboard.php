@@ -78,11 +78,12 @@ $order_status = array(
     'total' => 0
 );
 
-// Lấy số lượng đơn hàng theo trạng thái từ bảng orders
+// Lấy số lượng đơn hàng theo trạng thái từ bảng orders theo ngày hiện tại
 $sql_order_status = "SELECT 
     status,
     COUNT(*) as count 
     FROM orders 
+    WHERE DATE(created_at) = CURDATE()
     GROUP BY status";
 
 $result_order_status = $conn->query($sql_order_status);
@@ -92,11 +93,12 @@ while($row = $result_order_status->fetch_assoc()) {
     $order_status['total'] += (int)$row['count'];
 }
 
-// Cộng thêm số lượng từ bảng history_orders
+// Cộng thêm số lượng từ bảng history_orders theo ngày hiện tại
 $sql_history_status = "SELECT 
     status,
     COUNT(*) as count 
     FROM history_orders 
+    WHERE DATE(created_at) = CURDATE()
     GROUP BY status";
 
 $result_history_status = $conn->query($sql_history_status);
