@@ -194,6 +194,8 @@ CREATE TABLE `history_orders` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+
 --
 -- Đang đổ dữ liệu cho bảng `history_orders`
 --
@@ -688,9 +690,8 @@ INSERT INTO `news` (`id`, `title`, `description`, `image_url`, `status`, `create
 --
 -- Cấu trúc bảng cho bảng `orders`
 --
-
 CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
@@ -700,11 +701,12 @@ CREATE TABLE `orders` (
   `discount_percent` int(11) DEFAULT NULL,
   `final_total` int(11) DEFAULT NULL,
   `free_of_charge` int(11) DEFAULT NULL,
-  `payment_method` enum('cod','online') DEFAULT NULL,
+  `payment_method` enum('cod','bank') DEFAULT NULL,
   `note` text DEFAULT NULL,
   `status` enum('pending','processing','completed','canceled') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)  -- Thêm dòng này để đặt id làm khóa chính
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

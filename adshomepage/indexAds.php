@@ -12,25 +12,41 @@ try {
     // Kiểm tra quyền truy cập dựa trên phương thức request
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            include __DIR__ . '/getAds.php';
+            if (file_exists(__DIR__ . '/getAds.php')) {
+                include __DIR__ . '/getAds.php';
+            } else {
+                throw new Exception("Không tìm thấy file getAds.php");
+            }
             break;
 
         case 'PUT':
             $userId = TokenUtils::validateTokenAndGetUserId();
             $permissionMiddleware->authorize($userId, 'put_header');
-            include __DIR__ . '/putAds.php';
+            if (file_exists(__DIR__ . '/putAds.php')) {
+                include __DIR__ . '/putAds.php';
+            } else {
+                throw new Exception("Không tìm thấy file putAds.php");
+            }
             break;
    
         case 'POST':
             $userId = TokenUtils::validateTokenAndGetUserId();
             $permissionMiddleware->authorize($userId, 'post_header');
-            include __DIR__ . '/postAds.php'; 
+            if (file_exists(__DIR__ . '/postAds.php')) {
+                include __DIR__ . '/postAds.php';
+            } else {
+                throw new Exception("Không tìm thấy file postAds.php");
+            }
             break;
 
         case 'DELETE':
             $userId = TokenUtils::validateTokenAndGetUserId();
             $permissionMiddleware->authorize($userId, 'delete_header');
-            include __DIR__ . '/deleteAds.php';
+            if (file_exists(__DIR__ . '/deleteAds.php')) {
+                include __DIR__ . '/deleteAds.php';
+            } else {
+                throw new Exception("Không tìm thấy file deleteAds.php");
+            }
             break;
 
         default:
