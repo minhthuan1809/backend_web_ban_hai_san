@@ -137,8 +137,9 @@ else if (preg_match('/\/history_order/', $request_uri)) {
     include __DIR__ . '/history_orders/indexHistoryOrder.php';
 }
 
-else if (preg_match('/\/sepay/', $request_uri)) {
-    include __DIR__ . '/api/sepay.php';
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/dashboard
+else if (preg_match('/\/dashboard/', $request_uri)) {
+    include __DIR__ . '/api/dashboard.php';
 }
 else {
     echo json_encode([
