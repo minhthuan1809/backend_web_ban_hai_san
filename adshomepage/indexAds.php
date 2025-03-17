@@ -12,10 +12,10 @@ try {
     // Kiểm tra quyền truy cập dựa trên phương thức request
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            if (file_exists(__DIR__ . '/getAds.php')) {
-                include __DIR__ . '/getAds.php';
+            if (file_exists(__DIR__ . '/getads.php')) {
+                include __DIR__ . '/getads.php';
             } else {
-                throw new Exception("Không tìm thấy file getAds.php");
+                throw new Exception("Không tìm thấy file getads.php");
             }
             break;
 
