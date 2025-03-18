@@ -68,6 +68,14 @@ try {
                 if($stmtHistory->execute()) {
                     $history_order_id = $stmtHistory->insert_id;
 
+                    // Kiểm tra và tăng số lượng mã giảm giá nếu có
+                    if(!empty($orderData['discount_code'])) {
+                        $updateDiscountSql = "UPDATE discount SET quantity = quantity + 1 WHERE code = ?";
+                        $stmtDiscount = $conn->prepare($updateDiscountSql);
+                        $stmtDiscount->bind_param("s", $orderData['discount_code']);
+                        $stmtDiscount->execute();
+                    }
+
                     // Xóa đơn hàng khỏi bảng orders
                     $deleteOrderSql = "DELETE FROM orders WHERE id = ?";
                     $stmtDelete = $conn->prepare($deleteOrderSql);
@@ -124,14 +132,8 @@ try {
                         $stmtProduct->execute();
                     }
 
-                    // Giảm số lượng mã giảm giá và thêm vào discount_history
+                    // Thêm vào discount_history nếu có mã giảm giá
                     if(!empty($orderData['discount_code'])) {
-                        // Cập nhật số lượng mã giảm giá
-                        $updateDiscountSql = "UPDATE discount SET quantity = quantity - 1 WHERE code = ? AND quantity > 0";
-                        $stmtDiscount = $conn->prepare($updateDiscountSql);
-                        $stmtDiscount->bind_param("s", $orderData['discount_code']);
-                        $stmtDiscount->execute();
-
                         // Lấy discount_id
                         $getDiscountIdSql = "SELECT id FROM discount WHERE code = ?";
                         $stmtDiscountId = $conn->prepare($getDiscountIdSql);
@@ -200,6 +202,32 @@ try {
     
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
+            // Lấy thông tin đơn hàng hiện tại
+            $getOrderSql = "SELECT discount_code FROM orders WHERE id = ?";
+            $stmt = $conn->prepare($getOrderSql);
+            $stmt->bind_param("i", $orderId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $orderData = $result->fetch_assoc();
+
+            if ($orderData && !empty($orderData['discount_code'])) {
+                // Lấy discount_id
+                $getDiscountIdSql = "SELECT id FROM discount WHERE code = ?";
+                $stmtDiscountId = $conn->prepare($getDiscountIdSql);
+                $stmtDiscountId->bind_param("s", $orderData['discount_code']);
+                $stmtDiscountId->execute();
+                $discountResult = $stmtDiscountId->get_result();
+                $discountData = $discountResult->fetch_assoc();
+
+                if ($discountData) {
+                    // Thêm vào discount_history
+                    $insertDiscountHistorySql = "INSERT INTO discount_history (discount_id, order_history_id) VALUES (?, ?)";
+                    $stmtDiscountHistory = $conn->prepare($insertDiscountHistorySql);
+                    $stmtDiscountHistory->bind_param("ii", $discountData['id'], $orderId);
+                    $stmtDiscountHistory->execute();
+                }
+            }
+
             echo json_encode([
                 "ok" => true,
                 "success" => true,

@@ -30,6 +30,25 @@ try {
     if ($result->num_rows > 0) {
         $discounts = array();
         while($row = $result->fetch_assoc()) {
+            // Kiểm tra số lượng mã giảm giá
+            if ($row['quantity'] <= 0) {
+                echo json_encode([
+                    'ok' => false,
+                    'status' => false,
+                    'message' => 'Mã giảm giá đã hết'
+                ]);
+                exit;
+            }
+            // Kiểm tra thời gian mã giảm giá
+            $current_time = date('Y-m-d H:i:s');
+            if ($current_time > $row['end_time']) {
+                echo json_encode([
+                    'ok' => false,
+                    'status' => false,
+                    'message' => 'Mã giảm giá đã hết hạn'
+                ]);
+                exit;
+            }
             // Định dạng lại thời gian
             $row['start_time'] = date('Y-m-d H:i:s', strtotime($row['start_time']));
             $row['end_time'] = date('Y-m-d H:i:s', strtotime($row['end_time']));

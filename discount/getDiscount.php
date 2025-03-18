@@ -36,7 +36,13 @@ try {
             $row['end_time'] = date('Y-m-d H:i:s', strtotime($row['end_time']));
             $row['created_at'] = date('Y-m-d H:i:s', strtotime($row['created_at']));
             $row['updated_at'] = date('Y-m-d H:i:s', strtotime($row['updated_at']));
-            $row['status'] = isset($row['status']) ? ($row['status'] == 1 ? true : false) : false;
+            // Kiểm tra số lượng mã giảm giá và thời gian
+            $current_time = date('Y-m-d H:i:s');
+            if ($row['quantity'] <= 0 || $current_time > $row['end_time']) {
+                $row['status'] = false;
+            } else {
+                $row['status'] = isset($row['status']) ? ($row['status'] == 1 ? true : false) : false;
+            }
             $discounts[] = $row;
         }
         

@@ -679,6 +679,7 @@ CREATE TABLE `orders` (
   `free_of_charge` int(11) DEFAULT NULL,
   `payment_method` enum('cod','bank') DEFAULT NULL,
   `note` text DEFAULT NULL,
+  `discount_id` int(11) DEFAULT NULL,
   `status` enum('pending','processing','completed','canceled') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -733,10 +734,14 @@ INSERT INTO `permission` (`id`, `name`) VALUES
 (32, 'post_discount'),
 (33, 'put_discount'),
 (34, 'delete_discount'),
-(35, 'get_order'),
-(36, 'post_order'),
-(37, 'put_order'),
-(38, 'delete_order');
+  (35, 'get_order'),
+  (36, 'post_order'),
+  (37, 'put_order'),
+  (38, 'delete_order'),
+  (39, 'get_discount'),
+  (40, 'post_discount'),
+  (41, 'put_discount'),
+  (42, 'delete_discount');
 
 -- --------------------------------------------------------
 
@@ -1034,7 +1039,7 @@ CREATE TABLE `verification_codes` (
 
 --
 -- Chỉ mục cho bảng `address`
---
+--dí
 ALTER TABLE `address`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);

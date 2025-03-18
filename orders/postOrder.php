@@ -12,29 +12,6 @@ if (!isset($conn) || !($conn instanceof mysqli)) {
 }
 
 try {
-    // Tạo bảng orders nếu chưa tồn tại
-    $createTableSQL = "CREATE TABLE IF NOT EXISTS orders (
-        id INT PRIMARY KEY AUTO_INCREMENT,
-        user_id INT NOT NULL,
-        name VARCHAR(255),
-        phone VARCHAR(20), 
-        address TEXT,
-        data_product JSON,
-        discount_code VARCHAR(50),
-        discount_percent INT,
-        final_total INT,
-        free_of_charge INT,
-        payment_method ENUM('cod', 'bank'),
-        note TEXT,
-        status ENUM('pending', 'processing', 'completed', 'canceled') DEFAULT 'pending',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
-
-    if (!$conn->query($createTableSQL)) {
-        throw new Exception("Lỗi tạo bảng orders: " . $conn->error);
-    }
-
     // Lấy dữ liệu từ request
     $data = json_decode(file_get_contents("php://input"), true);
 
@@ -96,8 +73,8 @@ try {
 
     // Chuẩn bị câu lệnh SQL
     $sql = "INSERT INTO orders (user_id, name, phone, address, data_product, 
-            discount_code, discount_percent, final_total, free_of_charge, payment_method, note) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            discount_code, discount_percent, final_total, free_of_charge, payment_method, note, discount_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
     if ($stmt === false) {
@@ -111,6 +88,7 @@ try {
     $free_of_charge = isset($data['free_of_charge']) ? $data['free_of_charge'] : 0;
     $payment_method = isset($data['payment_method']) ? $data['payment_method'] : 'cod';
     $note = isset($data['note']) ? $data['note'] : '';
+    $discount_id = isset($data['discount_id']) ? $data['discount_id'] : null;
 
     // Chuyển mảng products thành JSON
     $data_product = json_encode($data['products']);
@@ -119,7 +97,7 @@ try {
     }
 
     // Bind các tham số
-    if (!$stmt->bind_param("isssssiiiss",
+    if (!$stmt->bind_param("isssssiiissi",
         $data['user_id'],
         $data['name'],
         $data['phone'], 
@@ -130,7 +108,8 @@ try {
         $final_total,
         $free_of_charge,
         $payment_method,
-        $note
+        $note,
+        $discount_id
     )) {
         throw new Exception("Lỗi bind tham số: " . $stmt->error);
     }
@@ -152,6 +131,18 @@ try {
     $delete_stmt->bind_param("i", $data['user_id']);
     $delete_stmt->execute();
     $delete_stmt->close();
+
+    // Giảm số lượng mã giảm giá nếu có sử dụng
+    if ($discount_id) {
+        $update_discount_sql = "UPDATE discount SET quantity = quantity - 1 WHERE id = ? AND quantity > 0";
+        $update_discount_stmt = $conn->prepare($update_discount_sql);
+        if ($update_discount_stmt === false) {
+            throw new Exception("Lỗi chuẩn bị câu lệnh cập nhật số lượng mã giảm giá: " . $conn->error);
+        }
+        $update_discount_stmt->bind_param("i", $discount_id);
+        $update_discount_stmt->execute();
+        $update_discount_stmt->close();
+    }
 
     // Gửi email xác nhận đơn hàng cho khách hàng
     try {
