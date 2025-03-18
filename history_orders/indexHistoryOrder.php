@@ -13,9 +13,15 @@ try {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             try {
-                $userId = TokenUtils::validateTokenAndGetUserId();
-                $permissionMiddleware->authorize($userId, 'get_order');
-                include __DIR__ . '/getHistoryOrder.php';
+
+                if (strpos($request_uri, '/history_order/user') !== false) {
+                    include __DIR__ . '/getHistoryOderUser.php';
+                }
+                else {
+                    $userId = TokenUtils::validateTokenAndGetUserId();
+                    $permissionMiddleware->authorize($userId, 'get_order');
+                    include __DIR__ . '/getHistoryOrder.php';
+                }
             } catch (Exception $e) {
                 http_response_code(404);
                 echo json_encode([

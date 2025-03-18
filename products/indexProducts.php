@@ -14,7 +14,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         if (preg_match('/\/products\/\d+$/', $request_uri)) {
             include __DIR__ . '/detailProduct.php';
-        } else {
+        }
+        else if (strpos($request_uri, '/products/section') !== false) {
+            include __DIR__ . '/getProductSection.php';
+        }
+        else {
             // Thay đổi để tránh lỗi Undefined array key "id"
             include __DIR__ . '/getProduct.php';
         }

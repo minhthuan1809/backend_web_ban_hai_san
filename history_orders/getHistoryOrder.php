@@ -107,6 +107,7 @@ try {
                 'free_of_charge' => $row['free_of_charge'],
                 'payment_method' => $row['payment_method'],
                 'status' => $row['status'],
+                'reason' => $row['reason'],
                 'products' => $product_list,
                 'created_at' => $row['created_at'],
                 'updated_at' => $row['updated_at']

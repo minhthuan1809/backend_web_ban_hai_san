@@ -27,10 +27,14 @@ try {
             break;
 
         case 'PUT':
-           
-            $userId = TokenUtils::validateTokenAndGetUserId();
-            $permissionMiddleware->authorize($userId, 'put_order');
-            include __DIR__ . '/putOrder.php';
+            $request_uri = $_SERVER['REQUEST_URI'];
+            if (preg_match('/\/order\/cancel\/\d+/', $request_uri)) {
+                include __DIR__ . '/userCancelOder.php';
+            }else{
+                $userId = TokenUtils::validateTokenAndGetUserId();
+                $permissionMiddleware->authorize($userId, 'put_order');
+                include __DIR__ . '/putOrder.php';
+            }
             break;
    
         case 'POST':

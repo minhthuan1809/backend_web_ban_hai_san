@@ -188,6 +188,7 @@ CREATE TABLE `history_orders` (
   `final_total` int(11) DEFAULT NULL,
   `free_of_charge` int(11) DEFAULT NULL,
   `payment_method` enum('cod','bank') DEFAULT NULL,
+  `reason` text DEFAULT NULL,
   `note` text DEFAULT NULL,
   `status` enum('completed','canceled') DEFAULT 'completed',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
