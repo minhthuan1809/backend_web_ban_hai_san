@@ -36,12 +36,13 @@ while($row = $result_by_month->fetch_assoc()) {
 // Chuyển đổi mảng kết hợp thành mảng tuần tự
 $revenue_by_month = array_values($revenue_by_month);
 
-// Lấy doanh thu theo ngày
+// Lấy doanh thu theo ngày chỉ với đơn hàng thành công
 $sql_revenue_by_day = "SELECT 
     DATE(created_at) as date,
     COALESCE(SUM(final_total), 0) as revenue
     FROM history_orders 
-    WHERE DATE(created_at) = CURDATE()
+    WHERE DATE(created_at) = CURDATE() 
+    AND status = 'completed'
     GROUP BY DATE(created_at)";
 
 $result_by_day = $conn->query($sql_revenue_by_day);
