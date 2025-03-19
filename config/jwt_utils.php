@@ -48,7 +48,7 @@ class JwtUtils {
             'user_id' => $userId,
             'email' => $email,
             'iat' => time(),
-            'exp' => time() + (60 * 60) // Token hết hạn sau 1 giờ
+            'exp' => time() + (6 * 60 * 60) // Token hết hạn sau 6 giờ
         ]);
         
         $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));

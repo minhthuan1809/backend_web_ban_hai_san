@@ -133,7 +133,7 @@ try {
         ]);
     } else {
         echo json_encode([
-            'ok' => false,
+            'ok' => true,
             'success' => false,
             'message' => 'Không có đơn hàng nào',
             'data' => [
