@@ -152,6 +152,10 @@ else if (preg_match('/\/stats/', $request_uri)) {
     include __DIR__ . '/api/Stats.php';
 }
 
+// [GET] http://localhost/backend_web_ban_hai_san/index1.php/api/client/v1/news_header
+else if (preg_match('/\/news_header/', $request_uri)) {
+    include __DIR__ . '/api/getNewHeader.php';
+}
 else {
     echo json_encode([
         'ok' => false,
