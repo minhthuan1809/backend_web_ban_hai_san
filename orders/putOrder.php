@@ -122,7 +122,10 @@ try {
                 );
                 if($stmtHistory->execute()) {
                     $history_order_id = $stmtHistory->insert_id;
-
+                    
+                    // Ghi log kiểm tra history_order_id
+                    error_log("Đơn hàng completed - ID mới: " . $history_order_id);
+                    
                     // Cập nhật số lượng sản phẩm
                     $products = json_decode($orderData['data_product'], true);
                     foreach ($products as $product) {
@@ -146,8 +149,26 @@ try {
                             // Thêm vào discount_history
                             $insertDiscountHistorySql = "INSERT INTO discount_history (discount_id, order_history_id) VALUES (?, ?)";
                             $stmtDiscountHistory = $conn->prepare($insertDiscountHistorySql);
+                            
+                            // Kiểm tra tính hợp lệ của history_order_id
+                            if ($history_order_id <= 0) {
+                                error_log("Lỗi: history_order_id không hợp lệ (" . $history_order_id . ")");
+                                $history_order_id = (int)$orderId; // Dùng ID ban đầu nếu giá trị không hợp lệ
+                                error_log("Đã sử dụng orderId thay thế: " . $history_order_id);
+                            }
+                            
                             $stmtDiscountHistory->bind_param("ii", $discountData['id'], $history_order_id);
-                            $stmtDiscountHistory->execute();
+                            $result = $stmtDiscountHistory->execute();
+                            
+                            // Kiểm tra kết quả và ghi log
+                            error_log("Lưu discount_history: Code=" . $orderData['discount_code'] . ", ID=" . $discountData['id'] . 
+                                     ", History ID=" . $history_order_id . ", Result=" . ($result ? 'true' : 'false'));
+                            
+                            if (!$result) {
+                                error_log("Lỗi khi lưu discount_history: " . $stmtDiscountHistory->error);
+                            }
+                        } else {
+                            error_log("Không tìm thấy mã giảm giá: " . $orderData['discount_code']);
                         }
                     }
 
@@ -202,31 +223,9 @@ try {
     
     if ($stmt->execute()) {
         if ($stmt->affected_rows > 0) {
-            // Lấy thông tin đơn hàng hiện tại
-            $getOrderSql = "SELECT discount_code FROM orders WHERE id = ?";
-            $stmt = $conn->prepare($getOrderSql);
-            $stmt->bind_param("i", $orderId);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $orderData = $result->fetch_assoc();
-
-            if ($orderData && !empty($orderData['discount_code'])) {
-                // Lấy discount_id
-                $getDiscountIdSql = "SELECT id FROM discount WHERE code = ?";
-                $stmtDiscountId = $conn->prepare($getDiscountIdSql);
-                $stmtDiscountId->bind_param("s", $orderData['discount_code']);
-                $stmtDiscountId->execute();
-                $discountResult = $stmtDiscountId->get_result();
-                $discountData = $discountResult->fetch_assoc();
-
-                if ($discountData) {
-                    // Thêm vào discount_history
-                    $insertDiscountHistorySql = "INSERT INTO discount_history (discount_id, order_history_id) VALUES (?, ?)";
-                    $stmtDiscountHistory = $conn->prepare($insertDiscountHistorySql);
-                    $stmtDiscountHistory->bind_param("ii", $discountData['id'], $orderId);
-                    $stmtDiscountHistory->execute();
-                }
-            }
+            // Lưu lịch sử sử dụng mã giảm giá chỉ khi đơn hàng chuyển thành completed
+            // Không lưu discount_history khi cập nhật thông thường vì order_history_id không tồn tại
+            // trong bảng history_orders khi đơn hàng vẫn đang trong bảng orders
 
             echo json_encode([
                 "ok" => true,

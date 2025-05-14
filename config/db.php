@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost"; // Your server name
-$username = "root"; // Thường username mặc định của XAMPP là "root"
-$password = ""; // Mặc định password trong XAMPP thường để trống
+$username = "admin_larvps"; // Thường username mặc định của XAMPP là "root"
+$password = "NzA2MzdkOTJkZjg4ZTlhOTgwNjUxNDhk"; // Mặc định password trong XAMPP thường để trống
 $dbname = "haisan"; // Your database name
 $port = 3306; // Your database port
 
