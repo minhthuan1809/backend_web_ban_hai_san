@@ -1,4 +1,5 @@
 <?php
+// test
 class JwtUtils {
     private static $secretKey = '/KEY_JWT=(.*)/'; // Thay thế bằng secret key thực của bạn
     
