@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
     environment {
          PATH = "/usr/local/bin:/usr/bin:${PATH}"
          ENVIRONMENT = "PRODUCTION"
@@ -14,7 +9,17 @@ pipeline {
             steps {
                 script {
                     def commitMsg = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-                    sh "docker-compose -f docker-compose.yml up -d --build"
+                    
+                    // Thay thế docker-compose bằng các lệnh Docker riêng lẻ
+                    // Giả định container tên là 'web_ban_hai_san'
+                    sh """
+                        if docker ps -a | grep -q web_ban_hai_san; then
+                            docker stop web_ban_hai_san
+                            docker rm web_ban_hai_san
+                        fi
+                        docker build -t web_ban_hai_san:latest .
+                        docker run -d --name web_ban_hai_san -p 80:80 web_ban_hai_san:latest
+                    """
                 }
             }
         }
