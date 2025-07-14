@@ -1,7 +1,7 @@
 <?php
-$servername = "haisan"; // Your server name
-$username = "haisan"; // Thường username mặc định của XAMPP là "root"
-$password = "haisan"; // Mặc định password trong XAMPP thường để trống
+$servername = "1Panel-mysql-BzOO"; // Your server name
+$username = "haisan"; // Username cho MySQL
+$password = "haisan"; // Password cho MySQL
 $dbname = "haisan"; // Your database name
 $port = 3306; // Your database port
 
