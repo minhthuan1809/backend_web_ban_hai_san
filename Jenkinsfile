@@ -18,7 +18,7 @@ pipeline {
                             docker rm web_ban_hai_san
                         fi
                         docker build -t web_ban_hai_san:latest .
-                        docker run -d --name web_ban_hai_san -p 80:80 web_ban_hai_san:latest
+                        docker run -d --name web_ban_hai_san -p 9999:9999 web_ban_hai_san:latest
                     """
                 }
             }
