@@ -1,5 +1,5 @@
 <?php
-$servername = "1Panel-mysql-BzOO"; // Your server name
+$servername = "mysql"; // Docker service name for MySQL
 $username = "haisan"; // Username cho MySQL
 $password = "haisan"; // Password cho MySQL
 $dbname = "haisan"; // Your database name
