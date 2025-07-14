@@ -21,7 +21,7 @@ pipeline {
                         docker run -d --name web_ban_hai_san -p 9999:80 web_ban_hai_san:latest
                         
                         # Đảm bảo container đã khởi động
-                        sleep 5
+                        // sleep 5
                         
                         # Kiểm tra trạng thái container
                         docker ps | grep web_ban_hai_san
