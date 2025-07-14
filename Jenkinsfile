@@ -14,20 +14,29 @@ pipeline {
                     // Giả định container tên là 'web_ban_hai_san'
                     sh """
                         if docker ps -a | grep -q web_ban_hai_san; then
-                            docker stop web_ban_hai_san
-                            docker rm web_ban_hai_san
+                            docker stop web_ban_hai_san || true
+                            docker rm web_ban_hai_san || true
                         fi
                         docker build -t web_ban_hai_san:latest .
                         docker run -d --name web_ban_hai_san -p 9999:80 web_ban_hai_san:latest
                         
                         # Đảm bảo container đã khởi động
-                        // sleep 5
+                        sleep 5
                         
                         # Kiểm tra trạng thái container
                         docker ps | grep web_ban_hai_san
                     """
                 }
             }
+        }
+    }
+    
+    post {
+        success {
+            echo "CI/CD pipeline thành công!"
+        }
+        failure {
+            echo "CI/CD pipeline thất bại!"
         }
     }
 }
