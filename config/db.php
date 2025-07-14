@@ -1,9 +1,9 @@
 <?php
-$servername = "localhost"; // Your server name
-$username = "admin_larvps"; // Thường username mặc định của XAMPP là "root"
-$password = "NzA2MzdkOTJkZjg4ZTlhOTgwNjUxNDhk"; // Mặc định password trong XAMPP thường để trống
-$dbname = "haisan"; // Your database name
-$port = 3306; // Your database port
+$servername = getenv('DB_HOST') ?: "haisan"; // Server name từ biến môi trường hoặc mặc định
+$username = getenv('DB_USER') ?: "haisan"; // Username từ biến môi trường hoặc mặc định
+$password = getenv('DB_PASSWORD') ?: "haisan"; // Password từ biến môi trường hoặc mặc định
+$dbname = getenv('DB_NAME') ?: "haisan"; // Database name từ biến môi trường hoặc mặc định
+$port = getenv('DB_PORT') ?: 3306; // Database port từ biến môi trường hoặc mặc định
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname, $port);
