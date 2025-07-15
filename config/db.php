@@ -1,6 +1,7 @@
 <?php
-// Kết nối đến cơ sở dữ liệu trong container
-$servername = "1Panel-mysql-BzOO"; // Tên container MySQL
+// Kết nối đến cơ sở dữ liệu 
+// Thử kết nối bằng địa chỉ IP thay vì tên container
+$servername = "127.0.0.1"; // Localhost IP
 $username = "haisan";
 $password = "haisan";
 $dbname = "haisan";
