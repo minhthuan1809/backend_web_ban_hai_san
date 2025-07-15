@@ -1,7 +1,7 @@
 <?php
-$servername = "42.96.16.211"; // Docker service name for MySQL
-$username = "haisan"; // Username cho MySQL
-$password = "haisan"; // Password cho MySQL
+$servername = "1Panel-mysql-BzOO"; // Docker service name for MySQL
+$username = "root"; // Username cho MySQL
+$password = "Thuan18092003"; // Password cho MySQL
 $dbname = "haisan"; // Your database name
 $port = 3306; // Your database port
 
