@@ -1,5 +1,6 @@
 <?php
-$servername = "42.96.16.211"; // Địa chỉ IP MySQL bên ngoài
+// Kết nối đến cơ sở dữ liệu trong container
+$servername = "1Panel-mysql-BzOO"; // Tên container MySQL
 $username = "haisan";
 $password = "haisan";
 $dbname = "haisan";
